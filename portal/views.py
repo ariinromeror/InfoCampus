@@ -74,24 +74,19 @@ def gestion_estudiantes(request):
         cedula_id = request.POST.get('matricula') 
         
         if nombre and email and cedula_id:
-            # --- VALIDACIÓN DE SEGURIDAD ---
-            # Verificamos si el email ya existe para evitar errores de base de datos
             if Estudiante.objects.filter(email=email).exists():
                 messages.error(request, f"El correo {email} ya está registrado.")
                 return redirect('gestion_estudiantes')
 
-            # --- LÓGICA DE MATRÍCULA INTELIGENTE ---
             anio_actual = datetime.now().year
             iniciales = "".join([n[0].upper() for n in nombre.split()[:2]])
             ultimos_digitos = str(cedula_id)[-4:]
             codigo_generado = f"{anio_actual}-{iniciales}-{ultimos_digitos}"
             
-            # Verificamos si la matrícula generada ya existe (poco probable, pero posible)
             if Estudiante.objects.filter(matricula=codigo_generado).exists():
                 messages.error(request, "Ya existe un estudiante con esta matrícula generada.")
                 return redirect('gestion_estudiantes')
 
-            # Si todo está bien, creamos
             Estudiante.objects.create(
                 nombre=nombre, 
                 email=email, 
@@ -102,6 +97,20 @@ def gestion_estudiantes(request):
             
     estudiantes = Estudiante.objects.all()
     return render(request, 'portal/gestion_estudiantes.html', {'estudiantes': estudiantes})
+
+
+@login_required
+def eliminar_estudiante(request, estudiante_id):
+    # Verificación de jerarquía: solo admin o administrativo pueden borrar
+    if request.user.perfil.rol not in ['admin', 'administrativo']:
+        messages.error(request, "No tienes permiso para eliminar estudiantes.")
+        return redirect('dashboard')
+        
+    estudiante = get_object_or_404(Estudiante, id=estudiante_id)
+    nombre_borrado = estudiante.nombre
+    estudiante.delete()
+    messages.warning(request, f"El estudiante {nombre_borrado} ha sido eliminado.")
+    return redirect('gestion_estudiantes')
 
 # ==========================================================
 # 4. PROCESOS ACADÉMICOS (INSCRIPCIÓN Y NOTAS)

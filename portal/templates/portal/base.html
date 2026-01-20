@@ -8,119 +8,83 @@
     <title>InfoCampus | Learning Platform</title>
     
     <script>
-        // Configuración de Tailwind con soporte para Modo Oscuro por clase
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-                    colors: {
-                        campus: {
-                            blue: '#0052CC',
-                            mint: '#00A389',
-                            slate: '#0F172A',
-                            bg: '#F8FAFC'
-                        }
-                    }
+                    colors: { campus: { blue: '#0052CC', mint: '#00A389', slate: '#0F172A', bg: '#F8FAFC' } }
                 }
             }
         }
-
-        // Lógica para persistir el modo oscuro
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark')
         } else {
             document.documentElement.classList.remove('dark')
         }
-
         function toggleDarkMode() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.theme = 'light';
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.theme = 'dark';
-            }
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
         }
     </script>
 
     <style>
-        /* Transición suave para todos los cambios de color */
-        * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
-        
-        .glass-sidebar { 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(12px); 
-            border-right: 1px solid #E2E8F0; 
-        }
-        
-        .dark .glass-sidebar { 
-            background: rgba(15, 23, 42, 0.9); 
-            border-right: 1px solid #1E293B; 
-        }
+        * { transition: background-color 0.3s ease, color 0.3s ease; }
+        .glass-sidebar { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-right: 1px solid #E2E8F0; }
+        .dark .glass-sidebar { background: rgba(15, 23, 42, 0.9); border-right: 1px solid #1E293B; }
     </style>
 </head>
 <body class="min-h-screen flex bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
 
     <aside class="w-72 fixed h-full flex flex-col p-6 glass-sidebar z-50">
-        <div class="flex items-center gap-3 px-2 mb-12">
-            <div class="w-10 h-10 bg-campus-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-200 dark:shadow-none text-white font-bold">IC</div>
-            <span class="text-xl font-extrabold tracking-tight text-campus-slate dark:text-white">InfoCampus</span>
+        <div class="flex items-center gap-3 px-2 mb-8">
+            <div class="w-10 h-10 bg-campus-blue rounded-xl flex items-center justify-center text-white font-bold">IC</div>
+            <span class="text-xl font-extrabold tracking-tight dark:text-white">InfoCampus</span>
         </div>
 
-        <nav class="flex-1 space-y-2">
-            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-                {% if request.resolver_match.url_name == 'dashboard' %} 
-                    bg-blue-50 dark:bg-blue-900/30 text-campus-blue dark:text-blue-400 font-bold 
-                {% else %} 
-                    text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-white 
-                {% endif %}">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                Resumen
-            </a>
+        <div class="px-4 py-3 mb-6 bg-slate-100/50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Usuario</p>
+            <p class="text-sm font-bold truncate">{{ user.username }}</p>
+            {% if user.perfil %}
+                <span class="text-[10px] px-2 py-0.5 bg-campus-blue/10 text-campus-blue rounded-full border border-campus-blue/20">
+                    {{ user.perfil.get_rol_display }}
+                </span>
+            {% endif %}
+        </div>
 
-            <a href="{% url 'gestion_materias' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-                {% if request.resolver_match.url_name == 'gestion_materias' %} 
-                    bg-blue-50 dark:bg-blue-900/30 text-campus-blue dark:text-blue-400 font-bold 
-                {% else %} 
-                    text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-white 
-                {% endif %}">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                Materias
-            </a>
-
-            <a href="{% url 'gestion_estudiantes' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-                {% if request.resolver_match.url_name == 'gestion_estudiantes' %} 
-                    bg-blue-50 dark:bg-blue-900/30 text-campus-blue dark:text-blue-400 font-bold 
-                {% else %} 
-                    text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-white 
-                {% endif %}">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                Estudiantes
-            </a>
-
-            <a href="{% url 'inscribir_estudiante' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-                {% if request.resolver_match.url_name == 'inscribir_estudiante' %} 
-                    bg-blue-50 dark:bg-blue-900/30 text-campus-blue dark:text-blue-400 font-bold 
-                {% else %} 
-                    text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-white 
-                {% endif %}">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
-                Inscripciones
-            </a>
-
-            <a href="{% url 'generar_reporte_pdf' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 text-mint-600 dark:text-emerald-400 hover:bg-mint-50 dark:hover:bg-emerald-900/20 font-bold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                Descargar PDF
-            </a>
-
-            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
-                <button onclick="toggleDarkMode()" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                    <span class="dark:hidden flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg> Modo Noche</span>
-                    <span class="hidden dark:flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg> Modo Día</span>
-                </button>
+        <nav class="flex-1 space-y-1 overflow-y-auto">
+            <div class="pb-4">
+                <p class="px-4 text-[11px] font-bold text-slate-400 uppercase mb-2 tracking-widest">General</p>
+                <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    Resumen
+                </a>
             </div>
+
+            {% if user.perfil.rol == 'admin' or user.perfil.rol == 'administrativo' %}
+            <div class="py-4 border-t border-slate-100 dark:border-slate-800">
+                <p class="px-4 text-[11px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Gestión</p>
+                <a href="{% url 'gestion_materias' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">Materias</a>
+                <a href="{% url 'gestion_estudiantes' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">Estudiantes</a>
+                <a href="{% url 'inscribir_estudiante' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">Inscripciones</a>
+            </div>
+            {% endif %}
+
+            {% if user.perfil.rol == 'profesor' or user.perfil.rol == 'admin' %}
+            <div class="py-4 border-t border-slate-100 dark:border-slate-800">
+                <p class="px-4 text-[11px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Docente</p>
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 italic">Notas</a>
+            </div>
+            {% endif %}
         </nav>
+
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+            <button onclick="toggleDarkMode()" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                Modo Día/Noche
+            </button>
+            <a href="/admin/logout/" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 font-bold">
+                Cerrar Sesión
+            </a>
+        </div>
     </aside>
 
     <main class="flex-1 ml-72 p-12 overflow-y-auto">
