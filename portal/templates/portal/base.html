@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>InfoCampus | Learning Platform</title>
+    
+    <script>
+        // Configuración de Tailwind con soporte para Modo Oscuro por clase
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        campus: {
+                            blue: '#0052CC',
+                            mint: '#00A389',
+                            slate: '#0F172A',
+                            bg: '#F8FAFC'
+                        }
+                    }
+                }
+            }
+        }
+
+        // Lógica para persistir el modo oscuro
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+
+    <style>
+        /* Transición suave para todos los cambios de color */
+        * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
+        
+        .glass-sidebar { 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(12px); 
+            border-right: 1px solid #E2E8F0; 
+        }
+        
+        /* Ajuste de Sidebar para modo oscuro */
+        .dark .glass-sidebar { 
+            background: rgba(15, 23, 42, 0.9); 
+            border-right: 1px solid #1E293B; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+
+    <aside class="w-72 fixed h-full flex flex-col p-6 glass-sidebar z-50">
+        <div class="flex items-center gap-3 px-2 mb-12">
+            <div class="w-10 h-10 bg-campus-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-200 dark:shadow-none text-white font-bold">IC</div>
+            <span class="text-xl font-extrabold tracking-tight text-campus-slate dark:text-white">InfoCampus</span>
+        </div>
+
+        <nav class="flex-1 space-y-2">
+            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
+                {% if request.resolver_match.url_name == 'dashboard' %} 
+                    bg-blue-50 dark:bg-blue-900/30 text-campus-blue dark:text-blue-400 font-bold 
+                {% else %} 
+                    text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-white 
+                {% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Resumen
+            </a>
+
+            <a href="{% url 'gestion_materias' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
+                {% if request.resolver_match.url_name == 'gestion_materias' %} 
+                    bg-blue-50 dark:bg-blue-900/30 text-campus-blue dark:text-blue-400 font-bold 
+                {% else %} 
+                    text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-white 
+                {% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                Materias
+            </a>
+
+            <button onclick="toggleDarkMode()" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <span class="dark:hidden">🌙 Modo Noche</span>
+                <span class="hidden dark:inline">☀️ Modo Día</span>
+            </button>
