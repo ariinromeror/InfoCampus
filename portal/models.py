@@ -44,13 +44,22 @@ class Materia(models.Model):
     def __str__(self):
         return self.nombre
 
-# 4. Registros de Actividad
+# 4. Registros de Actividad (CORREGIDO)
 class RegistroActividad(models.Model):
-    TIPOS = (('nota', 'Nota'), ('asistencia', 'Asistencia'), ('extra', 'Extra'))
+    TIPOS = (
+        ('nota', 'Nota'), 
+        ('asistencia', 'Asistencia'), 
+        ('extra', 'Extra'),
+        ('INSCRIPCION', 'Inscripción') # Añadimos esto para que no de error al inscribir
+    )
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
-    alumno = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Cambiamos 'alumno' para que apunte al modelo Estudiante
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, null=True, blank=True)
+    # Guardamos quién registró la nota (opcional, pero útil)
+    usuario_registro = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    
     tipo = models.CharField(max_length=15, choices=TIPOS)
-    valor = models.CharField(max_length=10)
+    valor = models.CharField(max_length=20) # Aumentamos a 20 por si el texto es largo
     fecha = models.DateField(auto_now_add=True)
 
     class Meta:
