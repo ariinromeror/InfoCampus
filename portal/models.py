@@ -2,19 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # ==========================================================
-# 1. PERFILES Y SEGURIDAD (Jerarquía de Usuarios)
+# 1. PERFILES Y SEGURIDAD
 # ==========================================================
 class Perfil(models.Model):
-    """
-    Extiende la información de User para manejar los 4 niveles de acceso.
-    """
     ROLES = (
         ('admin', 'Administrador'),
         ('administrativo', 'Personal Administrativo'),
         ('profesor', 'Profesor'),
         ('estudiante', 'Estudiante'),
     )
-    
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
     rol = models.CharField(max_length=20, choices=ROLES, default='estudiante')
 
@@ -27,13 +23,9 @@ class Perfil(models.Model):
 
 
 # ==========================================================
-# 2. DIRECTORIO MAESTRO (Entidades Independientes)
+# 2. DIRECTORIO MAESTRO
 # ==========================================================
 class Estudiante(models.Model):
-    """
-    Base de datos de alumnos. 
-    Aquí se almacenan los datos personales y la matrícula generada.
-    """
     nombre = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
     matricula = models.CharField(max_length=25, unique=True)
@@ -48,17 +40,11 @@ class Estudiante(models.Model):
 
 
 # ==========================================================
-# 3. GESTIÓN ACADÉMICA (Materias y Relaciones)
+# 3. GESTIÓN ACADÉMICA
 # ==========================================================
 class Materia(models.Model):
-    """
-    Catálogo de materias. 
-    Relaciona a los Estudiantes con los Profesores (User).
-    """
     nombre = models.CharField(max_length=100)
     codigo = models.CharField(max_length=15, unique=True)
-    
-    # El profesor es un usuario del sistema
     profesor = models.ForeignKey(
         User, 
         on_delete=models.SET_NULL, 
@@ -66,8 +52,7 @@ class Materia(models.Model):
         blank=True, 
         related_name='materias_asignadas'
     )
-    
-    # Estudiantes inscritos desde el directorio maestro
+    # Mantenemos esto para consultas rápidas, pero lo gestionaremos desde la vista
     estudiantes_inscritos = models.ManyToManyField(
         Estudiante, 
         related_name='materias', 
@@ -83,12 +68,9 @@ class Materia(models.Model):
 
 
 # ==========================================================
-# 4. TRANSACCIONES Y NOTAS (Historial de Actividad)
+# 4. TRANSACCIONES (EL CORAZÓN DEL SISTEMA)
 # ==========================================================
 class RegistroActividad(models.Model):
-    """
-    Registra cada evento: Inscripciones, Notas y Asistencias.
-    """
     TIPOS = (
         ('nota', 'Nota'), 
         ('asistencia', 'Asistencia'), 
@@ -98,18 +80,25 @@ class RegistroActividad(models.Model):
     
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE, related_name='registros')
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name='actividades')
-    
-    # Quién realizó el registro (Admin, Profe o Administrativo)
     usuario_registro = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    
     tipo = models.CharField(max_length=15, choices=TIPOS)
-    valor = models.CharField(max_length=50) # Espacio suficiente para notas o comentarios
+    valor = models.CharField(max_length=50) 
     fecha = models.DateField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Registro de Actividad"
         verbose_name_plural = "Registros de Actividades"
-        ordering = ['-fecha'] # El más reciente primero
+        ordering = ['-fecha']
+        
+        # --- CIMIENTOS: REGLA DE ORO ---
+        # Impide físicamente que un estudiante se inscriba 2 veces en la misma materia
+        constraints = [
+            models.UniqueConstraint(
+                fields=['estudiante', 'materia', 'tipo'], 
+                name='unique_inscripcion_estudiante',
+                condition=models.Q(tipo='INSCRIPCION')
+            )
+        ]
 
     def __str__(self):
         return f"{self.get_tipo_display()}: {self.estudiante.nombre} en {self.materia.nombre}"
