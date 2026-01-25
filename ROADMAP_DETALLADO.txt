@@ -1,0 +1,46 @@
+?? MASTER ROADMAP: INFO CAMPUS SaaS (EDICIÓN ELITE)
+FASE 1: ARQUITECTURA RELACIONAL Y SEGURIDAD (EL CORAZÓN)
+1.1 Bóveda de Seguridad: Instalación de python-dotenv. Configuración de .env y .gitignore para proteger la SECRET_KEY y credenciales.
+
+1.2 Modelado de Datos Pro: Creación de tablas relacionales: Carreras, Materias, Inscripciones y Notas.
+
+1.3 Roles Jerárquicos: Implementación de permisos (Director > Coordinador > Secretaria > Profesor > Estudiante).
+
+1.4 Data Seeding: Script para inyectar 60 alumnos, 4 profesores y staff con datos coherentes.
+
+FASE 2: LÓGICA DE NEGOCIO Y "MODO CAMALEÓN"
+2.1 Adaptabilidad de Asistencia: Switch global para elegir entre QR Dinámico (TOTP), QR Estático (Carnet) o Lista Manual.
+
+2.2 Muro de Pago: Lógica en el Backend para bloquear acceso a notas y asistencia si el alumno está en mora.
+
+2.3 Anti-Fraude: Validación GPS y validación de ID de dispositivo para escaneos de QR.
+
+2.4 Integridad: Re-autenticación obligatoria (PIN/Pass) para que un profesor edite notas y Logs de Auditoría.
+
+FASE 3: DASHBOARDS ADAPTATIVOS (UX/UI PREMIUM)
+3.1 UI Camaleón: El dashboard oculta o muestra funciones según el rol y el nivel tecnológico de la academia.
+
+3.2 Accesibilidad: Interfaz optimizada para usuarios 40+ (botones grandes, flujos claros).
+
+3.3 Alerta Temprana: Indicadores visuales en el panel del Director/Coordinador para alumnos en riesgo académico.
+
+FASE 4: MÓDULOS FINANCIEROS Y DOCUMENTALES (VENDIBILIDAD)
+4.1 Tesorería: Registro de pagos, corte de caja diario y recibos digitales.
+
+4.2 Certificación PDF: Generador de boletas con Código de Verificación Seguro (CVS) para evitar falsificaciones.
+
+4.3 Centro de Mensajería: Sistema interno de tutorías para evitar el uso de WhatsApp personal.
+
+FASE 5: LANZAMIENTO Y DOCUMENTACIÓN PROFESIONAL
+5.1 README de Alto Impacto: Documentación técnica que "vende" el proyecto en GitHub.
+
+5.2 Manuales por Rol: Guía de uso específica para cada tipo de usuario (Director, Profe, etc.).
+
+5.3 Deploy Seguro: Subida a producción con SSL y protección de cabeceras.
+
+
+
+"Hola Gemini, soy ArinRomero. Estoy trabajando en el proyecto INFO CAMPUS SaaS. Aquí tienes el Roadmap que acordamos: [Pegas el Roadmap]. Estamos en la Fase 1.1 (Seguridad .env). Vamos a empezar con los códigos."
+
+
+1 paso iniciar vscode instalar pip install django-environ

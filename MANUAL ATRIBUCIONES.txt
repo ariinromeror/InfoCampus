@@ -1,0 +1,46 @@
+?? MANUAL DE ATRIBUCIONES (QUÉ HACE CADA QUIÉN)
+Este será el índice de tu manual de usuario para que el cliente sepa qué "poderes" tiene cada cuenta:
+
+1. EL DIRECTOR (THE BOSS)
+Control Total: Único con permiso para Eliminar registros de la base de datos.
+
+Configurador: Activa/Desactiva el modo de asistencia QR.
+
+Analista: Acceso a KPIs globales de ingresos y deserción.
+
+Auditor: Puede ver los Logs (quién cambió qué nota y a qué hora).
+
+2. COORDINADOR ACADÉMICO (EL SUPERVISOR)
+Gestor de Currículo: Crea carreras y asigna materias a los semestres.
+
+Mediador: Es el único que puede autorizar el cambio de una nota una vez que el sistema se ha bloqueado por tiempo.
+
+Monitor: Supervisa que los profesores estén cumpliendo con sus fechas de evaluación.
+
+3. PROFESOR (GESTIÓN DE AULA)
+Calificador: Sube notas de parciales (con tiempo límite de edición).
+
+Controlador: Genera el código QR para pasar asistencia o firma la lista manual.
+
+Visualizador: Ve la ficha técnica de sus alumnos (con foto) para evitar suplantaciones.
+
+4. TESORERÍA (GESTIÓN FINANCIERA)
+Cajero: Registra pagos de colegiaturas y emite recibos.
+
+Controlador de Mora: Define quién entra en "Bloqueo Académico" por falta de pago.
+
+Financiero: Genera reportes de ingresos para el Director.
+
+5. SECRETARÍA (BACK OFFICE)
+Registrador: Matricula alumnos nuevos y carga sus documentos físicos.
+
+Desactivador: Puede suspender alumnos (Soft Delete), pero nunca eliminar.
+
+Horarios: Asigna aulas y horas a las materias.
+
+6. ESTUDIANTE (USUARIO FINAL)
+Consulta: Ve su progreso académico, notas y plan de estudios.
+
+Finanzas: Revisa sus recibos y deudas pendientes.
+
+Asistencia: Escanea el QR para validar su presencia en clase (si está al día en pagos).
