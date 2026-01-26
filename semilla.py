@@ -1,49 +1,59 @@
 import os
 import django
+import random
 
-# 1. Configurar Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from portal.models import Usuario
-from django.core import mail
+from portal.models import Usuario, Carrera, Materia, Nota
 
-def crear_datos_prueba():
-    print("🚀 Iniciando creación de usuarios profesionales...")
+def generar_datos():
+    print("--- 🚀 Iniciando siembra (Versión Rápida) ---")
+
+    # 1. Carreras
+    for nom, cod in [("Software", "SOFT"), ("Admin", "ADM")]:
+        Carrera.objects.get_or_create(nombre=nom, codigo=cod)
     
-    # Lista de usuarios: (username, password, rol, email)
-    usuarios_test = [
-        ('director_boss', 'admin123', 'director', 'director@academia.com'),
-        ('coord_acad', 'coord123', 'coordinador', 'coordinacion@academia.com'),
-        ('tesorero_fin', 'teso123', 'administrativo', 'finanzas@academia.com'),
-        ('secre_adm', 'secre123', 'secretaria', 'admisiones@academia.com'),
-        ('profe_test', 'profe123', 'profesor', 'profesor@gmail.com'),
-        ('alumno_test', 'alumno123', 'estudiante', 'estudiante@gmail.com'),
-    ]
+    carreras = Carrera.objects.all()
+    print(f"✅ Carreras listas.")
 
-    for username, password, rol, email in usuarios_test:
-        if not Usuario.objects.filter(username=username).exists():
-            # Creamos el usuario en la base de datos
-            Usuario.objects.create_user(
-                username=username, 
-                password=password, 
-                rol=rol,
-                email=email
-            )
-            
-            # Esto generará el archivo .txt en la carpeta que configuramos en settings.py
-            mail.send_mail(
-                'Bienvenido al Sistema Académico',
-                f'Hola {username}, tu cuenta como {rol} ha sido creada.\nUsuario: {username}\nClave: {password}',
-                'sistema@academia.com',
-                [email],
-                fail_silently=False,
-            )
-            print(f"✅ Usuario creado: {username} ({rol})")
-        else:
-            print(f"⚠️ El usuario {username} ya existe.")
+    # 2. Profesores
+    profes = []
+    for i in range(1, 4):
+        p, _ = Usuario.objects.get_or_create(
+            username=f"profe{i}", 
+            defaults={'rol': 'profesor', 'first_name': f"Prof {i}"}
+        )
+        p.set_password("profe123")
+        p.save()
+        profes.append(p)
+    print(f"✅ Profesores listos.")
 
-    print("\n✨ Proceso terminado. ¡Busca los archivos .txt en tu proyecto!")
+    # 3. Materias
+    mats = []
+    for m_nom in ["Programación", "Base de Datos", "Contabilidad"]:
+        mat, _ = Materia.objects.get_or_create(
+            nombre=m_nom, 
+            carrera=random.choice(carreras),
+            defaults={'profesor': random.choice(profes)}
+        )
+        mats.append(mat)
+    print(f"✅ Materias listas.")
 
-if __name__ == '__main__':
-    crear_datos_prueba()
+    # 4. Estudiantes (Bajamos a 30 para probar velocidad)
+    print("⏳ Creando estudiantes y notas... espera un momento.")
+    for i in range(1, 31):
+        est, _ = Usuario.objects.get_or_create(
+            username=f"estudiante{i}",
+            defaults={'rol': 'estudiante', 'en_mora': random.choice([True, False, False])}
+        )
+        est.set_password("est123")
+        est.save()
+        
+        # Nota rápida
+        Nota.objects.get_or_create(estudiante=est, materia=random.choice(mats), defaults={'valor': 8.5})
+
+    print(f"--- ✨ ÉXITO TOTAL: Sistema cargado ---")
+
+if __name__ == "__main__":
+    generar_datos()

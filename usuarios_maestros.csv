@@ -1,0 +1,12 @@
+username,email,rol,dni,en_mora,es_becado,porcentaje_beca,carrera
+admin_gral,admin@infocampus.com,director,101010,False,False,0,Ingeniería
+coord_acad,coord@infocampus.com,coordinador,202020,False,False,0,Derecho
+juan_tesorero,pagos@infocampus.com,tesorero,303030,False,False,0,Administración
+profe_garcia,garcia@infocampus.com,profesor,404040,False,False,0,Ingeniería
+profe_martinez,martinez@infocampus.com,profesor,505050,False,False,0,Psicología
+ana_elite,ana@estudiante.com,estudiante,111111,False,True,100,Ingeniería
+pedro_mora,pedro@estudiante.com,estudiante,222222,True,False,0,Ingeniería
+luis_regular,luis@estudiante.com,estudiante,333333,False,False,0,Derecho
+maria_beca50,maria@estudiante.com,estudiante,444444,False,True,50,Psicología
+carla_deudora,carla@estudiante.com,estudiante,555555,True,False,0,Administración
+jose_alumni,jose@egresado.com,estudiante,666666,False,False,0,Diseño

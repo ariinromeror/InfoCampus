@@ -1,37 +1,39 @@
 from rest_framework import serializers
-from .models import Usuario, Estudiante, Profesor, Materia, Carrera, Nota
+from .models import Usuario, Carrera, Materia, Nota, Asistencia
 
-class UsuarioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Usuario
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'rol']
+class MateriaDetalleSerializer(serializers.ModelSerializer):
+    profesor_nombre = serializers.ReadOnlyField(source='profesor.get_full_name')
+    nota_valor = serializers.SerializerMethodField()
+    codigo_carrera = serializers.ReadOnlyField(source='carrera.codigo')
 
-class CarreraSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Carrera
-        fields = '__all__'
-
-class EstudianteSerializer(serializers.ModelSerializer):
-    nombre_completo = serializers.CharField(source='usuario.get_full_name', read_only=True)
-    carrera_nombre = serializers.CharField(source='carrera.nombre', read_only=True)
-
-    class Meta:
-        model = Estudiante
-        fields = ['id', 'usuario', 'nombre_completo', 'carrera', 'carrera_nombre', 'estado']
-
-class ProfesorSerializer(serializers.ModelSerializer):
-    nombre_completo = serializers.CharField(source='usuario.get_full_name', read_only=True)
-
-    class Meta:
-        model = Profesor
-        fields = ['id', 'usuario', 'nombre_completo', 'especialidad']
-
-class MateriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Materia
-        fields = '__all__'
+        fields = ['id', 'nombre', 'profesor_nombre', 'nota_valor', 'codigo_carrera']
+
+    def get_nota_valor(self, obj):
+        # DINÁMICO: Obtenemos el usuario que hace la petición
+        request = self.context.get('request')
+        user_param = request.query_params.get('user') if request else None
+        
+        if user_param:
+            user = Usuario.objects.filter(username=user_param).first()
+            if user:
+                nota = Nota.objects.filter(estudiante=user, materia=obj).first()
+                return float(nota.valor) if nota else 0.0
+        return 0.0
 
 class NotaSerializer(serializers.ModelSerializer):
+    estudiante_nombre = serializers.ReadOnlyField(source='estudiante.get_full_name')
+    materia_nombre = serializers.ReadOnlyField(source='materia.nombre')
+    
     class Meta:
         model = Nota
+        fields = [
+            'id', 'estudiante', 'estudiante_nombre', 'materia', 
+            'materia_nombre', 'valor', 'fecha_registro', 'fecha_modificacion'
+        ]
+
+class AsistenciaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Asistencia
         fields = '__all__'

@@ -1,214 +1,236 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { 
-  LayoutDashboard, BookOpen, GraduationCap, Settings, 
-  LogOut, User as UserIcon, Bell, Calendar, ChevronRight 
+  LayoutDashboard, 
+  BookOpen, 
+  QrCode, 
+  LogOut, 
+  User, 
+  AlertCircle,
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
+import './Dashboard.css';
 
-function Dashboard({ user, onLogout }) {
-  const [activeTab, setActiveTab] = useState('dashboard');
+const Dashboard = ({ user, onLogout }) => {
+  const [materias, setMaterias] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [view, setView] = useState('inicio');
+  const [qrToken, setQrToken] = useState(null);
 
-  const styles = {
-    // Contenedor principal sin márgenes, ocupa el 100% real
-    container: { 
-      display: 'flex', 
-      height: '100vh', 
-      width: '100vw', 
-      backgroundColor: '#f8fafc', 
-      fontFamily: 'Inter, system-ui, sans-serif',
-      overflow: 'hidden' 
-    },
-    // Sidebar fijo a la izquierda
-    sidebar: { 
-      width: '280px', 
-      backgroundColor: '#0f172a', 
-      color: 'white', 
-      display: 'flex', 
-      flexDirection: 'column',
-      flexShrink: 0 
-    },
-    logoSection: { 
-      padding: '25px', 
-      fontSize: '24px', 
-      fontWeight: 'bold', 
-      borderBottom: '1px solid #1e293b',
-      textAlign: 'left'
-    },
-    menu: { flex: 1, padding: '20px 0' },
-    menuItem: (tab) => ({ 
-      display: 'flex', alignItems: 'center', padding: '14px 25px', 
-      color: activeTab === tab ? 'white' : '#94a3b8', 
-      backgroundColor: activeTab === tab ? '#cc0000' : 'transparent',
-      cursor: 'pointer', transition: 'all 0.2s ease',
-      fontSize: '15px'
-    }),
-    // Área de la derecha que ocupa todo el resto
-    mainWrapper: { 
-      flex: 1, 
-      display: 'flex', 
-      flexDirection: 'column', 
-      minWidth: 0 
-    },
-    // Header superior pegado a los bordes
-    header: { 
-      height: '70px',
-      backgroundColor: 'white', 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center', 
-      padding: '0 30px',
-      borderBottom: '1px solid #e2e8f0',
-      flexShrink: 0
-    },
-    // Contenedor de contenido + panel derecho
-    bodyLayout: { 
-      display: 'flex', 
-      flex: 1, 
-      overflow: 'hidden' 
-    },
-    contentScroll: { 
-      flex: 1, 
-      padding: '40px', 
-      overflowY: 'auto' 
-    },
-    // Panel derecho estético
-    rightPanel: { 
-      width: '350px', 
-      backgroundColor: 'white', 
-      borderLeft: '1px solid #e2e8f0', 
-      padding: '30px', 
-      overflowY: 'auto',
-      display: 'block' // Puedes usar 'none' en móviles si quisieras
-    },
-    userProfile: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '12px',
-      padding: '6px 12px',
-      borderRadius: '50px',
-      backgroundColor: '#f1f5f9',
-      cursor: 'pointer'
+  // URL base apuntando a tu servidor Django
+  const API_URL = "http://127.0.0.1:8000/api/";
+
+  useEffect(() => {
+    const fetchDatosCompletos = async () => {
+      // Si el usuario no existe o está en mora, detenemos la carga si es estudiante
+      if (!user || (user.rol === 'estudiante' && user.en_mora)) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Petición al endpoint que ya verificamos en el navegador
+        const res = await axios.get(`${API_URL}mis-materias/`);
+        
+        const transformadas = res.data.map(item => ({
+          id: item.id,
+          nombre: item.nombre,
+          profesor: item.profesor_nombre || "Catedrático Asignado", 
+          // nota_valor viene como 9.5, lo convertimos a porcentaje (95%)
+          progreso: item.nota_valor ? parseFloat(item.nota_valor) * 10 : 0
+        }));
+        
+        setMaterias(transformadas);
+      } catch (err) {
+        console.error("Error al sincronizar con el Backend:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDatosCompletos();
+  }, [user]);
+
+  // Lógica para el Profesor: QR Dinámico (Corregido a singular 'asistencia')
+  const handleGenerarQR = async () => {
+    try {
+      const res = await axios.get(`${API_URL}asistencia/generar_qr/`);
+      setQrToken(res.data.token_dinamico);
+      setView('qr');
+    } catch (err) {
+      alert("Error de conexión con el servidor de asistencia");
     }
   };
 
-  const RenderContent = () => {
-    switch(activeTab) {
-      case 'cursos': return (
-        <div>
-          <h1 style={{fontSize: '32px', marginBottom: '10px'}}>📚 Mis Cursos</h1>
-          <hr style={{border: '0', borderTop: '1px solid #e2e8f0', marginBottom: '20px'}}/>
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px'}}>
-            <div style={{padding: '20px', border: '1px solid #ddd', borderRadius: '10px'}}>Matemáticas Aplicadas</div>
-            <div style={{padding: '20px', border: '1px solid #ddd', borderRadius: '10px'}}>Desarrollo Web con Django</div>
-          </div>
-        </div>
-      );
-      case 'notas': return <div><h1 style={{fontSize: '32px'}}>📊 Calificaciones</h1><p>No hay notas registradas en este periodo.</p></div>;
-      default: return (
-        <>
-          <h1 style={{fontSize: '32px', fontWeight: '800', margin: '0 0 10px 0'}}>Panel General</h1>
-          <p style={{color: '#64748b', marginBottom: '40px'}}>Bienvenido al sistema central de INFO CAMPUS.</p>
-          
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '25px'}}>
-            <div style={{backgroundColor: 'white', padding: '25px', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)'}}>
-              <h4 style={{color: '#64748b', margin: '0 0 15px 0', fontSize: '14px', textTransform: 'uppercase'}}>Asistencia Promedio</h4>
-              <p style={{fontSize: '36px', fontWeight: 'bold', margin: 0, color: '#0f172a'}}>94.2%</p>
-            </div>
-            <div style={{backgroundColor: 'white', padding: '25px', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)'}}>
-              <h4 style={{color: '#64748b', margin: '0 0 15px 0', fontSize: '14px', textTransform: 'uppercase'}}>Créditos Aprobados</h4>
-              <p style={{fontSize: '36px', fontWeight: 'bold', margin: 0, color: '#cc0000'}}>120</p>
-            </div>
-          </div>
-        </>
-      );
-    }
+  const getProgressColor = (percent) => {
+    if (percent < 30) return 'bg-red';
+    if (percent < 61) return 'bg-yellow'; // 60 es la nota mínima de aprobación
+    return 'bg-green';
   };
 
   return (
-    <div style={styles.container}>
-      {/* 1. SIDEBAR IZQUIERDO */}
-      <aside style={styles.sidebar}>
-        <div style={styles.logoSection}>
-          INFO<span style={{color: '#cc0000'}}>CAMPUS</span>
-        </div>
-        <nav style={styles.menu}>
-          <div style={styles.menuItem('dashboard')} onClick={() => setActiveTab('dashboard')}>
-            <LayoutDashboard size={20} style={{marginRight: '15px'}} /> Inicio
+    <div className="dashboard-container">
+      {/* SIDEBAR */}
+      <aside className="sidebar">
+        <div className="sidebar-logo">INFO<span>CAMPUS</span></div>
+        <nav style={{ flex: 1 }}>
+          <div 
+            className={`nav-item ${view === 'inicio' ? 'active' : ''}`} 
+            onClick={() => setView('inicio')}
+          >
+            <LayoutDashboard size={20} style={{ marginRight: '10px' }} />
+            Inicio
           </div>
-          <div style={styles.menuItem('cursos')} onClick={() => setActiveTab('cursos')}>
-            <BookOpen size={20} style={{marginRight: '15px'}} /> Mis Cursos
+          <div 
+            className={`nav-item ${view === 'materias' ? 'active' : ''}`} 
+            onClick={() => setView('materias')}
+          >
+            <BookOpen size={20} style={{ marginRight: '10px' }} />
+            Mis Materias
           </div>
-          <div style={styles.menuItem('notas')} onClick={() => setActiveTab('notas')}>
-            <GraduationCap size={20} style={{marginRight: '15px'}} /> Calificaciones
-          </div>
-          <div style={styles.menuItem('config')} onClick={() => setActiveTab('config')}>
-            <Settings size={20} style={{marginRight: '15px'}} /> Ajustes
-          </div>
+          {user.rol === 'profesor' && (
+            <div 
+              className={`nav-item ${view === 'qr' ? 'active' : ''}`} 
+              onClick={handleGenerarQR}
+            >
+              <QrCode size={20} style={{ marginRight: '10px' }} />
+              Asistencia QR
+            </div>
+          )}
         </nav>
-        <div style={{padding: '25px', borderTop: '1px solid #1e293b'}}>
-          <button onClick={onLogout} style={{display: 'flex', alignItems: 'center', width: '100%', background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '15px', fontWeight: '600'}}>
-            <LogOut size={18} style={{marginRight: '12px'}} /> Salir del Portal
-          </button>
+        <div className="nav-item logout" onClick={onLogout} style={{ marginTop: 'auto' }}>
+          <LogOut size={20} style={{ marginRight: '10px' }} />
+          Cerrar Sesión
         </div>
       </aside>
 
-      {/* 2. CONTENIDO DERECHO (TODO EL RESTO) */}
-      <div style={styles.mainWrapper}>
-        <header style={styles.header}>
-          <div style={{color: '#64748b', fontSize: '14px', fontWeight: '500'}}>
-            {activeTab.toUpperCase()} / VISUALIZACIÓN GENERAL
+      {/* CONTENIDO */}
+      <main className="main-content">
+        <header className="header-top">
+          <div className="header-info">
+            <h2 style={{ margin: 0 }}>
+              {view === 'inicio' && 'Panel Principal'}
+              {view === 'materias' && 'Malla Curricular'}
+              {view === 'qr' && 'Control de Asistencia'}
+            </h2>
+            <p style={{ color: '#666', margin: 0 }}>{user.carrera_nombre || 'Ingeniería de Sistemas'}</p>
           </div>
-          
-          <div style={{display: 'flex', alignItems: 'center', gap: '25px'}}>
-            <Bell size={20} color="#64748b" style={{cursor: 'pointer'}} />
-            <div style={styles.userProfile}>
-              <div style={{textAlign: 'right'}}>
-                <div style={{fontSize: '14px', fontWeight: '700', color: '#1e293b'}}>{user.nombre}</div>
-                <div style={{fontSize: '11px', color: '#cc0000', fontWeight: '800', textTransform: 'uppercase'}}>{user.rol}</div>
-              </div>
-              <div style={{width: '35px', height: '35px', backgroundColor: '#cc0000', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white'}}>
-                <UserIcon size={20} />
-              </div>
+          <div className="header-right">
+            <div className="user-info">
+              <h4>{user.first_name} {user.last_name}</h4>
+              <p style={{ fontSize: '12px', color: '#cc0000', fontWeight: 'bold' }}>{user.rol.toUpperCase()}</p>
             </div>
+            <div className="user-avatar"><User size={24} /></div>
           </div>
         </header>
 
-        <div style={styles.bodyLayout}>
-          {/* ÁREA DE TRABAJO DINÁMICA */}
-          <section style={styles.contentScroll}>
-            <RenderContent />
-          </section>
-
-          {/* PANEL LATERAL DE INFORMACIÓN ÚTIL */}
-          <aside style={styles.rightPanel}>
-            <h3 style={{fontSize: '18px', marginBottom: '25px', display: 'flex', alignItems: 'center', gap: '10px'}}>
-              <Calendar size={20} color="#cc0000" /> Agenda de Hoy
-            </h3>
-            
-            <div style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
-              <div style={{padding: '15px', backgroundColor: '#f8fafc', borderRadius: '12px', borderLeft: '4px solid #cc0000'}}>
-                <div style={{fontSize: '12px', color: '#64748b'}}>08:00 AM - 10:00 AM</div>
-                <div style={{fontWeight: '700', fontSize: '14px'}}>Sistemas Distribuidos</div>
-                <div style={{fontSize: '12px', color: '#94a3b8'}}>Aula 402 - Edificio B</div>
-              </div>
-
-              <div style={{padding: '15px', backgroundColor: '#f8fafc', borderRadius: '12px', borderLeft: '4px solid #94a3b8'}}>
-                <div style={{fontSize: '12px', color: '#64748b'}}>10:30 AM - 12:30 PM</div>
-                <div style={{fontWeight: '700', fontSize: '14px'}}>Taller de Ética</div>
-                <div style={{fontSize: '12px', color: '#94a3b8'}}>Auditorio Principal</div>
-              </div>
+        <div className="content-body">
+          {loading ? (
+            <div className="loader-box">
+              <Loader2 className="spinner" size={40} />
+              <p>Sincronizando con el servidor...</p>
             </div>
+          ) : (
+            <>
+              {user.en_mora && user.rol === 'estudiante' ? (
+                <div className="mora-card">
+                  <AlertCircle size={80} color="#cc0000" />
+                  <h1>Acceso Restringido</h1>
+                  <p>Regulariza tus pagos en Tesorería para ver tus notas.</p>
+                  <button className="btn-tesoreria">Ir a Pagos</button>
+                </div>
+              ) : (
+                <>
+                  {view === 'inicio' && (
+                    <div className="subjects-grid">
+                      {materias.length > 0 ? materias.map((m) => (
+                        <div key={m.id} className="subject-card">
+                          <div className="card-header">
+                            <h4>{m.nombre}</h4>
+                            {m.progreso >= 60 && <CheckCircle2 size={18} color="#2ecc71" />}
+                          </div>
+                          <p className="prof-tag">Prof: {m.profesor}</p>
+                          <div className="progress-container">
+                            <div 
+                              className={`progress-bar ${getProgressColor(m.progreso)}`} 
+                              style={{ width: `${m.progreso}%` }}
+                            ></div>
+                          </div>
+                          <div className="card-footer">
+                            <span>{m.progreso}% de aprobación</span>
+                            <strong>Nota: {m.progreso / 10}</strong>
+                          </div>
+                        </div>
+                      )) : <p>No se encontraron materias registradas.</p>}
+                    </div>
+                  )}
 
-            <div style={{marginTop: '40px', padding: '20px', backgroundColor: '#fff1f2', borderRadius: '15px'}}>
-              <h4 style={{margin: '0 0 10px 0', color: '#991b1b', fontSize: '14px'}}>Aviso Institucional</h4>
-              <p style={{fontSize: '12px', color: '#991b1b', lineHeight: '1.5'}}>
-                El sistema de pagos estará en mantenimiento este sábado a las 22:00.
-              </p>
-            </div>
-          </aside>
+                  {view === 'materias' && (
+                    <div className="table-card">
+                      <table className="data-table">
+                        <thead>
+                          <tr>
+                            <th>Materia</th>
+                            <th>Profesor</th>
+                            <th>Calificación</th>
+                            <th>Resultado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {materias.map((m) => (
+                            <tr key={m.id}>
+                              <td>{m.nombre}</td>
+                              <td>{m.profesor}</td>
+                              <td>{m.progreso / 10} / 10.0</td>
+                              <td>
+                                <span className={m.progreso >= 60 ? 'status-pass' : 'status-fail'}>
+                                  {m.progreso >= 60 ? 'Aprobada' : 'Reprobada'}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {view === 'qr' && (
+                    <div className="qr-panel">
+                      <h3>Código QR de Asistencia</h3>
+                      <div className="qr-display">
+                        {qrToken ? <QRCodeSVG value={qrToken} size={250} /> : <Loader2 className="spinner" />}
+                      </div>
+                      <button className="btn-refresh" onClick={handleGenerarQR}>Refrescar QR</button>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
+          )}
         </div>
-      </div>
+      </main>
+
+      <style>{`
+        .loader-box { text-align: center; padding: 100px; color: #cc0000; }
+        .spinner { animation: rotate 1s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .mora-card { text-align: center; padding: 80px; background: white; border-radius: 20px; }
+        .btn-tesoreria { margin-top: 20px; background: #cc0000; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; }
+        .prof-tag { font-size: 13px; color: #666; margin: 5px 0 15px 0; }
+        .card-footer { display: flex; justify-content: space-between; font-size: 11px; margin-top: 10px; }
+        .table-card { background: white; padding: 20px; border-radius: 15px; overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
+        .status-pass { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 4px 8px; border-radius: 5px; }
+        .status-fail { color: #d32f2f; font-weight: bold; background: #ffebee; padding: 4px 8px; border-radius: 5px; }
+        .qr-panel { text-align: center; background: white; padding: 40px; border-radius: 20px; }
+        .qr-display { margin: 30px auto; padding: 20px; width: fit-content; border: 15px solid #f9f9f9; border-radius: 15px; }
+        .btn-refresh { background: #1a1a1a; color: white; border: none; padding: 10px 30px; border-radius: 10px; cursor: pointer; }
+      `}</style>
     </div>
   );
-}
+};
 
 export default Dashboard;
