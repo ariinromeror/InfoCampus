@@ -6,229 +6,141 @@ import {
   QrCode, 
   LogOut, 
   User, 
-  AlertCircle,
+  ShieldAlert,
   CheckCircle2,
-  Loader2
+  Loader2,
+  CreditCard
 } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react';
-import './Dashboard.css';
 
 const Dashboard = ({ user, onLogout }) => {
   const [materias, setMaterias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState('inicio');
-  const [qrToken, setQrToken] = useState(null);
 
-  // URL base apuntando a tu servidor Django
   const API_URL = "http://127.0.0.1:8000/api/";
 
   useEffect(() => {
-    const fetchDatosCompletos = async () => {
-      // Si el usuario no existe o está en mora, detenemos la carga si es estudiante
-      if (!user || (user.rol === 'estudiante' && user.en_mora)) {
-        setLoading(false);
-        return;
-      }
-
+    const fetchDatos = async () => {
       try {
-        // Petición al endpoint que ya verificamos en el navegador
         const res = await axios.get(`${API_URL}mis-materias/`);
-        
-        const transformadas = res.data.map(item => ({
+        setMaterias(res.data.map(item => ({
           id: item.id,
           nombre: item.nombre,
           profesor: item.profesor_nombre || "Catedrático Asignado", 
-          // nota_valor viene como 9.5, lo convertimos a porcentaje (95%)
           progreso: item.nota_valor ? parseFloat(item.nota_valor) * 10 : 0
-        }));
-        
-        setMaterias(transformadas);
+        })));
       } catch (err) {
-        console.error("Error al sincronizar con el Backend:", err);
+        console.error("Error al cargar datos:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDatosCompletos();
+    // Lógica Camaleón: Si está en mora, no cargamos datos, solo mostramos el muro
+    if (user && !(user.en_mora && user.rol === 'estudiante')) {
+      fetchDatos();
+    } else {
+      setLoading(false);
+    }
   }, [user]);
 
-  // Lógica para el Profesor: QR Dinámico (Corregido a singular 'asistencia')
-  const handleGenerarQR = async () => {
-    try {
-      const res = await axios.get(`${API_URL}asistencia/generar_qr/`);
-      setQrToken(res.data.token_dinamico);
-      setView('qr');
-    } catch (err) {
-      alert("Error de conexión con el servidor de asistencia");
-    }
-  };
-
-  const getProgressColor = (percent) => {
-    if (percent < 30) return 'bg-red';
-    if (percent < 61) return 'bg-yellow'; // 60 es la nota mínima de aprobación
-    return 'bg-green';
-  };
+  const isMora = user?.en_mora && user?.rol === 'estudiante';
 
   return (
-    <div className="dashboard-container">
-      {/* SIDEBAR */}
-      <aside className="sidebar">
-        <div className="sidebar-logo">INFO<span>CAMPUS</span></div>
-        <nav style={{ flex: 1 }}>
+    <div className="flex min-h-screen bg-slate-50 font-sans">
+      {/* SIDEBAR - Bloqueado si hay mora */}
+      <aside className="w-64 bg-slate-900 text-white flex flex-col p-6 transition-all border-r border-slate-800">
+        <div className="text-2xl font-black tracking-tighter mb-10 text-blue-500">INFO<span className="text-white">CAMPUS</span></div>
+        <nav className="flex-1 space-y-2">
           <div 
-            className={`nav-item ${view === 'inicio' ? 'active' : ''}`} 
-            onClick={() => setView('inicio')}
+            onClick={() => !isMora && setView('inicio')} 
+            className={`flex items-center gap-3 p-3 rounded-xl transition-all ${isMora ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer hover:bg-slate-800'} ${view === 'inicio' && !isMora ? 'bg-blue-600 shadow-lg' : 'text-slate-400'}`}
           >
-            <LayoutDashboard size={20} style={{ marginRight: '10px' }} />
-            Inicio
+            <LayoutDashboard size={20} /> Inicio
           </div>
           <div 
-            className={`nav-item ${view === 'materias' ? 'active' : ''}`} 
-            onClick={() => setView('materias')}
+            onClick={() => !isMora && setView('materias')} 
+            className={`flex items-center gap-3 p-3 rounded-xl transition-all ${isMora ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer hover:bg-slate-800'} ${view === 'materias' && !isMora ? 'bg-blue-600 shadow-lg' : 'text-slate-400'}`}
           >
-            <BookOpen size={20} style={{ marginRight: '10px' }} />
-            Mis Materias
+            <BookOpen size={20} /> Mis Materias
           </div>
-          {user.rol === 'profesor' && (
-            <div 
-              className={`nav-item ${view === 'qr' ? 'active' : ''}`} 
-              onClick={handleGenerarQR}
-            >
-              <QrCode size={20} style={{ marginRight: '10px' }} />
-              Asistencia QR
-            </div>
-          )}
         </nav>
-        <div className="nav-item logout" onClick={onLogout} style={{ marginTop: 'auto' }}>
-          <LogOut size={20} style={{ marginRight: '10px' }} />
-          Cerrar Sesión
+        
+        <div onClick={onLogout} className="flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-red-500/10 text-red-400 mt-auto transition-colors font-bold">
+          <LogOut size={20} /> Cerrar Sesión
         </div>
       </aside>
 
-      {/* CONTENIDO */}
-      <main className="main-content">
-        <header className="header-top">
-          <div className="header-info">
-            <h2 style={{ margin: 0 }}>
-              {view === 'inicio' && 'Panel Principal'}
-              {view === 'materias' && 'Malla Curricular'}
-              {view === 'qr' && 'Control de Asistencia'}
-            </h2>
-            <p style={{ color: '#666', margin: 0 }}>{user.carrera_nombre || 'Ingeniería de Sistemas'}</p>
+      {/* CONTENIDO PRINCIPAL */}
+      <main className="flex-1 flex flex-col overflow-hidden bg-white">
+        <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8">
+          <div>
+            <h2 className="text-xl font-bold text-slate-800">Portal Estudiantil</h2>
+            <p className="text-[10px] text-slate-400 font-black tracking-[3px] uppercase">{user?.carrera_nombre || 'Informática'}</p>
           </div>
-          <div className="header-right">
-            <div className="user-info">
-              <h4>{user.first_name} {user.last_name}</h4>
-              <p style={{ fontSize: '12px', color: '#cc0000', fontWeight: 'bold' }}>{user.rol.toUpperCase()}</p>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <h4 className="text-sm font-bold text-slate-900 leading-tight">{user?.first_name} {user?.last_name}</h4>
+              <span className={`text-[9px] px-2 py-0.5 rounded-full font-black tracking-tighter ${isMora ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                {isMora ? 'ACCESO RESTRINGIDO' : 'CUENTA ACTIVA'}
+              </span>
             </div>
-            <div className="user-avatar"><User size={24} /></div>
+            <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><User size={20} /></div>
           </div>
         </header>
 
-        <div className="content-body">
+        <div className="p-8 flex-1 overflow-y-auto">
           {loading ? (
-            <div className="loader-box">
-              <Loader2 className="spinner" size={40} />
-              <p>Sincronizando con el servidor...</p>
+            <div className="flex flex-col items-center justify-center h-full gap-4">
+              <Loader2 className="animate-spin text-blue-600" size={40} />
+              <p className="text-slate-400 font-bold text-sm">Sincronizando con Tesorería...</p>
+            </div>
+          ) : isMora ? (
+            /* EL ANUNCIO CENTRAL (REEMPLAZA TODO EL CONTENIDO) */
+            <div className="h-full flex items-center justify-center animate-in fade-in zoom-in duration-500">
+              <div className="max-w-md w-full bg-white border border-slate-200 p-12 rounded-[40px] shadow-2xl text-center">
+                <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                  <ShieldAlert size={48} className="text-red-600" />
+                </div>
+                <h1 className="text-3xl font-black text-slate-900 mb-4 italic tracking-tighter">¡ALTO AHÍ!</h1>
+                <p className="text-slate-500 mb-10 leading-relaxed text-sm">
+                  Tu acceso académico ha sido suspendido temporalmente. Para visualizar tus notas y materias, debes ponerte al día con tus mensualidades.
+                </p>
+                <button 
+                  onClick={() => window.location.href = 'https://pagos.infocampus.com'} 
+                  className="w-full bg-red-600 text-white py-5 rounded-2xl font-black hover:bg-red-700 transition-all shadow-xl shadow-red-100 flex items-center justify-center gap-3 text-lg active:scale-95"
+                >
+                  <CreditCard size={24} /> IR A PAGAR AHORA
+                </button>
+                <p className="mt-8 text-[10px] text-slate-400 font-bold uppercase tracking-widest">Información: Departamento de Tesorería</p>
+              </div>
             </div>
           ) : (
-            <>
-              {user.en_mora && user.rol === 'estudiante' ? (
-                <div className="mora-card">
-                  <AlertCircle size={80} color="#cc0000" />
-                  <h1>Acceso Restringido</h1>
-                  <p>Regulariza tus pagos en Tesorería para ver tus notas.</p>
-                  <button className="btn-tesoreria">Ir a Pagos</button>
+            /* CONTENIDO PARA ESTUDIANTES AL DÍA */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {materias.length > 0 ? materias.map((m) => (
+                <div key={m.id} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="font-bold text-slate-800 leading-tight">{m.nombre}</h4>
+                    {m.progreso >= 60 && <CheckCircle2 size={18} className="text-emerald-500" />}
+                  </div>
+                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden mb-3">
+                    <div className="h-full bg-blue-600 transition-all duration-1000" style={{ width: `${m.progreso}%` }}></div>
+                  </div>
+                  <div className="flex justify-between text-[10px] font-black text-slate-400">
+                    <span>CUMPLIMIENTO</span>
+                    <span className="text-blue-600">NOTA: {m.progreso / 10}</span>
+                  </div>
                 </div>
-              ) : (
-                <>
-                  {view === 'inicio' && (
-                    <div className="subjects-grid">
-                      {materias.length > 0 ? materias.map((m) => (
-                        <div key={m.id} className="subject-card">
-                          <div className="card-header">
-                            <h4>{m.nombre}</h4>
-                            {m.progreso >= 60 && <CheckCircle2 size={18} color="#2ecc71" />}
-                          </div>
-                          <p className="prof-tag">Prof: {m.profesor}</p>
-                          <div className="progress-container">
-                            <div 
-                              className={`progress-bar ${getProgressColor(m.progreso)}`} 
-                              style={{ width: `${m.progreso}%` }}
-                            ></div>
-                          </div>
-                          <div className="card-footer">
-                            <span>{m.progreso}% de aprobación</span>
-                            <strong>Nota: {m.progreso / 10}</strong>
-                          </div>
-                        </div>
-                      )) : <p>No se encontraron materias registradas.</p>}
-                    </div>
-                  )}
-
-                  {view === 'materias' && (
-                    <div className="table-card">
-                      <table className="data-table">
-                        <thead>
-                          <tr>
-                            <th>Materia</th>
-                            <th>Profesor</th>
-                            <th>Calificación</th>
-                            <th>Resultado</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {materias.map((m) => (
-                            <tr key={m.id}>
-                              <td>{m.nombre}</td>
-                              <td>{m.profesor}</td>
-                              <td>{m.progreso / 10} / 10.0</td>
-                              <td>
-                                <span className={m.progreso >= 60 ? 'status-pass' : 'status-fail'}>
-                                  {m.progreso >= 60 ? 'Aprobada' : 'Reprobada'}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-
-                  {view === 'qr' && (
-                    <div className="qr-panel">
-                      <h3>Código QR de Asistencia</h3>
-                      <div className="qr-display">
-                        {qrToken ? <QRCodeSVG value={qrToken} size={250} /> : <Loader2 className="spinner" />}
-                      </div>
-                      <button className="btn-refresh" onClick={handleGenerarQR}>Refrescar QR</button>
-                    </div>
-                  )}
-                </>
+              )) : (
+                <div className="col-span-full text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                  <p className="text-slate-400 font-bold">No se encontraron materias cargadas en el sistema.</p>
+                </div>
               )}
-            </>
+            </div>
           )}
         </div>
       </main>
-
-      <style>{`
-        .loader-box { text-align: center; padding: 100px; color: #cc0000; }
-        .spinner { animation: rotate 1s linear infinite; }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .mora-card { text-align: center; padding: 80px; background: white; border-radius: 20px; }
-        .btn-tesoreria { margin-top: 20px; background: #cc0000; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; }
-        .prof-tag { font-size: 13px; color: #666; margin: 5px 0 15px 0; }
-        .card-footer { display: flex; justify-content: space-between; font-size: 11px; margin-top: 10px; }
-        .table-card { background: white; padding: 20px; border-radius: 15px; overflow-x: auto; }
-        .data-table { width: 100%; border-collapse: collapse; }
-        .data-table th, .data-table td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
-        .status-pass { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 4px 8px; border-radius: 5px; }
-        .status-fail { color: #d32f2f; font-weight: bold; background: #ffebee; padding: 4px 8px; border-radius: 5px; }
-        .qr-panel { text-align: center; background: white; padding: 40px; border-radius: 20px; }
-        .qr-display { margin: 30px auto; padding: 20px; width: fit-content; border: 15px solid #f9f9f9; border-radius: 15px; }
-        .btn-refresh { background: #1a1a1a; color: white; border: none; padding: 10px 30px; border-radius: 10px; cursor: pointer; }
-      `}</style>
     </div>
   );
 };

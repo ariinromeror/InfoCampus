@@ -8,6 +8,7 @@ router.register(r'notas', NotaViewSet, basename='notas')
 router.register(r'asistencia', AsistenciaViewSet, basename='asistencia')
 
 urlpatterns = [
+    # Esta ruta se convertirá en /api/login/ gracias al include del archivo config/urls.py
     path('login/', login_view, name='login'),
     path('', include(router.urls)),
 ]
