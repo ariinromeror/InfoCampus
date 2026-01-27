@@ -1,0 +1,351 @@
+carrera,semestre,nombre,codigo,prerrequisito
+Ingenieria Sistemas,1,Materia 1.1 de Ingenieria Sistemas,ING-11,
+Ingenieria Sistemas,1,Materia 1.2 de Ingenieria Sistemas,ING-12,
+Ingenieria Sistemas,1,Materia 1.3 de Ingenieria Sistemas,ING-13,
+Ingenieria Sistemas,1,Materia 1.4 de Ingenieria Sistemas,ING-14,
+Ingenieria Sistemas,1,Materia 1.5 de Ingenieria Sistemas,ING-15,
+Ingenieria Sistemas,1,Materia 1.6 de Ingenieria Sistemas,ING-16,
+Ingenieria Sistemas,1,Materia 1.7 de Ingenieria Sistemas,ING-17,
+Ingenieria Sistemas,2,Materia 2.1 de Ingenieria Sistemas,ING-21,ING-11
+Ingenieria Sistemas,2,Materia 2.2 de Ingenieria Sistemas,ING-22,ING-12
+Ingenieria Sistemas,2,Materia 2.3 de Ingenieria Sistemas,ING-23,ING-13
+Ingenieria Sistemas,2,Materia 2.4 de Ingenieria Sistemas,ING-24,ING-14
+Ingenieria Sistemas,2,Materia 2.5 de Ingenieria Sistemas,ING-25,ING-15
+Ingenieria Sistemas,2,Materia 2.6 de Ingenieria Sistemas,ING-26,ING-16
+Ingenieria Sistemas,2,Materia 2.7 de Ingenieria Sistemas,ING-27,ING-17
+Ingenieria Sistemas,3,Materia 3.1 de Ingenieria Sistemas,ING-31,ING-21
+Ingenieria Sistemas,3,Materia 3.2 de Ingenieria Sistemas,ING-32,ING-22
+Ingenieria Sistemas,3,Materia 3.3 de Ingenieria Sistemas,ING-33,ING-23
+Ingenieria Sistemas,3,Materia 3.4 de Ingenieria Sistemas,ING-34,ING-24
+Ingenieria Sistemas,3,Materia 3.5 de Ingenieria Sistemas,ING-35,ING-25
+Ingenieria Sistemas,3,Materia 3.6 de Ingenieria Sistemas,ING-36,ING-26
+Ingenieria Sistemas,3,Materia 3.7 de Ingenieria Sistemas,ING-37,ING-27
+Ingenieria Sistemas,4,Materia 4.1 de Ingenieria Sistemas,ING-41,ING-31
+Ingenieria Sistemas,4,Materia 4.2 de Ingenieria Sistemas,ING-42,ING-32
+Ingenieria Sistemas,4,Materia 4.3 de Ingenieria Sistemas,ING-43,ING-33
+Ingenieria Sistemas,4,Materia 4.4 de Ingenieria Sistemas,ING-44,ING-34
+Ingenieria Sistemas,4,Materia 4.5 de Ingenieria Sistemas,ING-45,ING-35
+Ingenieria Sistemas,4,Materia 4.6 de Ingenieria Sistemas,ING-46,ING-36
+Ingenieria Sistemas,4,Materia 4.7 de Ingenieria Sistemas,ING-47,ING-37
+Ingenieria Sistemas,5,Materia 5.1 de Ingenieria Sistemas,ING-51,ING-41
+Ingenieria Sistemas,5,Materia 5.2 de Ingenieria Sistemas,ING-52,ING-42
+Ingenieria Sistemas,5,Materia 5.3 de Ingenieria Sistemas,ING-53,ING-43
+Ingenieria Sistemas,5,Materia 5.4 de Ingenieria Sistemas,ING-54,ING-44
+Ingenieria Sistemas,5,Materia 5.5 de Ingenieria Sistemas,ING-55,ING-45
+Ingenieria Sistemas,5,Materia 5.6 de Ingenieria Sistemas,ING-56,ING-46
+Ingenieria Sistemas,5,Materia 5.7 de Ingenieria Sistemas,ING-57,ING-47
+Ingenieria Sistemas,6,Materia 6.1 de Ingenieria Sistemas,ING-61,ING-51
+Ingenieria Sistemas,6,Materia 6.2 de Ingenieria Sistemas,ING-62,ING-52
+Ingenieria Sistemas,6,Materia 6.3 de Ingenieria Sistemas,ING-63,ING-53
+Ingenieria Sistemas,6,Materia 6.4 de Ingenieria Sistemas,ING-64,ING-54
+Ingenieria Sistemas,6,Materia 6.5 de Ingenieria Sistemas,ING-65,ING-55
+Ingenieria Sistemas,6,Materia 6.6 de Ingenieria Sistemas,ING-66,ING-56
+Ingenieria Sistemas,6,Materia 6.7 de Ingenieria Sistemas,ING-67,ING-57
+Ingenieria Sistemas,7,Materia 7.1 de Ingenieria Sistemas,ING-71,ING-61
+Ingenieria Sistemas,7,Materia 7.2 de Ingenieria Sistemas,ING-72,ING-62
+Ingenieria Sistemas,7,Materia 7.3 de Ingenieria Sistemas,ING-73,ING-63
+Ingenieria Sistemas,7,Materia 7.4 de Ingenieria Sistemas,ING-74,ING-64
+Ingenieria Sistemas,7,Materia 7.5 de Ingenieria Sistemas,ING-75,ING-65
+Ingenieria Sistemas,7,Materia 7.6 de Ingenieria Sistemas,ING-76,ING-66
+Ingenieria Sistemas,7,Materia 7.7 de Ingenieria Sistemas,ING-77,ING-67
+Ingenieria Sistemas,8,Materia 8.1 de Ingenieria Sistemas,ING-81,ING-71
+Ingenieria Sistemas,8,Materia 8.2 de Ingenieria Sistemas,ING-82,ING-72
+Ingenieria Sistemas,8,Materia 8.3 de Ingenieria Sistemas,ING-83,ING-73
+Ingenieria Sistemas,8,Materia 8.4 de Ingenieria Sistemas,ING-84,ING-74
+Ingenieria Sistemas,8,Materia 8.5 de Ingenieria Sistemas,ING-85,ING-75
+Ingenieria Sistemas,8,Materia 8.6 de Ingenieria Sistemas,ING-86,ING-76
+Ingenieria Sistemas,8,Materia 8.7 de Ingenieria Sistemas,ING-87,ING-77
+Ingenieria Sistemas,9,Materia 9.1 de Ingenieria Sistemas,ING-91,ING-81
+Ingenieria Sistemas,9,Materia 9.2 de Ingenieria Sistemas,ING-92,ING-82
+Ingenieria Sistemas,9,Materia 9.3 de Ingenieria Sistemas,ING-93,ING-83
+Ingenieria Sistemas,9,Materia 9.4 de Ingenieria Sistemas,ING-94,ING-84
+Ingenieria Sistemas,9,Materia 9.5 de Ingenieria Sistemas,ING-95,ING-85
+Ingenieria Sistemas,9,Materia 9.6 de Ingenieria Sistemas,ING-96,ING-86
+Ingenieria Sistemas,9,Materia 9.7 de Ingenieria Sistemas,ING-97,ING-87
+Ingenieria Sistemas,10,Materia 10.1 de Ingenieria Sistemas,ING-101,ING-91
+Ingenieria Sistemas,10,Materia 10.2 de Ingenieria Sistemas,ING-102,ING-92
+Ingenieria Sistemas,10,Materia 10.3 de Ingenieria Sistemas,ING-103,ING-93
+Ingenieria Sistemas,10,Materia 10.4 de Ingenieria Sistemas,ING-104,ING-94
+Ingenieria Sistemas,10,Materia 10.5 de Ingenieria Sistemas,ING-105,ING-95
+Ingenieria Sistemas,10,Materia 10.6 de Ingenieria Sistemas,ING-106,ING-96
+Ingenieria Sistemas,10,Materia 10.7 de Ingenieria Sistemas,ING-107,ING-97
+Derecho,1,Materia 1.1 de Derecho,DER-11,
+Derecho,1,Materia 1.2 de Derecho,DER-12,
+Derecho,1,Materia 1.3 de Derecho,DER-13,
+Derecho,1,Materia 1.4 de Derecho,DER-14,
+Derecho,1,Materia 1.5 de Derecho,DER-15,
+Derecho,1,Materia 1.6 de Derecho,DER-16,
+Derecho,1,Materia 1.7 de Derecho,DER-17,
+Derecho,2,Materia 2.1 de Derecho,DER-21,DER-11
+Derecho,2,Materia 2.2 de Derecho,DER-22,DER-12
+Derecho,2,Materia 2.3 de Derecho,DER-23,DER-13
+Derecho,2,Materia 2.4 de Derecho,DER-24,DER-14
+Derecho,2,Materia 2.5 de Derecho,DER-25,DER-15
+Derecho,2,Materia 2.6 de Derecho,DER-26,DER-16
+Derecho,2,Materia 2.7 de Derecho,DER-27,DER-17
+Derecho,3,Materia 3.1 de Derecho,DER-31,DER-21
+Derecho,3,Materia 3.2 de Derecho,DER-32,DER-22
+Derecho,3,Materia 3.3 de Derecho,DER-33,DER-23
+Derecho,3,Materia 3.4 de Derecho,DER-34,DER-24
+Derecho,3,Materia 3.5 de Derecho,DER-35,DER-25
+Derecho,3,Materia 3.6 de Derecho,DER-36,DER-26
+Derecho,3,Materia 3.7 de Derecho,DER-37,DER-27
+Derecho,4,Materia 4.1 de Derecho,DER-41,DER-31
+Derecho,4,Materia 4.2 de Derecho,DER-42,DER-32
+Derecho,4,Materia 4.3 de Derecho,DER-43,DER-33
+Derecho,4,Materia 4.4 de Derecho,DER-44,DER-34
+Derecho,4,Materia 4.5 de Derecho,DER-45,DER-35
+Derecho,4,Materia 4.6 de Derecho,DER-46,DER-36
+Derecho,4,Materia 4.7 de Derecho,DER-47,DER-37
+Derecho,5,Materia 5.1 de Derecho,DER-51,DER-41
+Derecho,5,Materia 5.2 de Derecho,DER-52,DER-42
+Derecho,5,Materia 5.3 de Derecho,DER-53,DER-43
+Derecho,5,Materia 5.4 de Derecho,DER-54,DER-44
+Derecho,5,Materia 5.5 de Derecho,DER-55,DER-45
+Derecho,5,Materia 5.6 de Derecho,DER-56,DER-46
+Derecho,5,Materia 5.7 de Derecho,DER-57,DER-47
+Derecho,6,Materia 6.1 de Derecho,DER-61,DER-51
+Derecho,6,Materia 6.2 de Derecho,DER-62,DER-52
+Derecho,6,Materia 6.3 de Derecho,DER-63,DER-53
+Derecho,6,Materia 6.4 de Derecho,DER-64,DER-54
+Derecho,6,Materia 6.5 de Derecho,DER-65,DER-55
+Derecho,6,Materia 6.6 de Derecho,DER-66,DER-56
+Derecho,6,Materia 6.7 de Derecho,DER-67,DER-57
+Derecho,7,Materia 7.1 de Derecho,DER-71,DER-61
+Derecho,7,Materia 7.2 de Derecho,DER-72,DER-62
+Derecho,7,Materia 7.3 de Derecho,DER-73,DER-63
+Derecho,7,Materia 7.4 de Derecho,DER-74,DER-64
+Derecho,7,Materia 7.5 de Derecho,DER-75,DER-65
+Derecho,7,Materia 7.6 de Derecho,DER-76,DER-66
+Derecho,7,Materia 7.7 de Derecho,DER-77,DER-67
+Derecho,8,Materia 8.1 de Derecho,DER-81,DER-71
+Derecho,8,Materia 8.2 de Derecho,DER-82,DER-72
+Derecho,8,Materia 8.3 de Derecho,DER-83,DER-73
+Derecho,8,Materia 8.4 de Derecho,DER-84,DER-74
+Derecho,8,Materia 8.5 de Derecho,DER-85,DER-75
+Derecho,8,Materia 8.6 de Derecho,DER-86,DER-76
+Derecho,8,Materia 8.7 de Derecho,DER-87,DER-77
+Derecho,9,Materia 9.1 de Derecho,DER-91,DER-81
+Derecho,9,Materia 9.2 de Derecho,DER-92,DER-82
+Derecho,9,Materia 9.3 de Derecho,DER-93,DER-83
+Derecho,9,Materia 9.4 de Derecho,DER-94,DER-84
+Derecho,9,Materia 9.5 de Derecho,DER-95,DER-85
+Derecho,9,Materia 9.6 de Derecho,DER-96,DER-86
+Derecho,9,Materia 9.7 de Derecho,DER-97,DER-87
+Derecho,10,Materia 10.1 de Derecho,DER-101,DER-91
+Derecho,10,Materia 10.2 de Derecho,DER-102,DER-92
+Derecho,10,Materia 10.3 de Derecho,DER-103,DER-93
+Derecho,10,Materia 10.4 de Derecho,DER-104,DER-94
+Derecho,10,Materia 10.5 de Derecho,DER-105,DER-95
+Derecho,10,Materia 10.6 de Derecho,DER-106,DER-96
+Derecho,10,Materia 10.7 de Derecho,DER-107,DER-97
+Medicina,1,Materia 1.1 de Medicina,MED-11,
+Medicina,1,Materia 1.2 de Medicina,MED-12,
+Medicina,1,Materia 1.3 de Medicina,MED-13,
+Medicina,1,Materia 1.4 de Medicina,MED-14,
+Medicina,1,Materia 1.5 de Medicina,MED-15,
+Medicina,1,Materia 1.6 de Medicina,MED-16,
+Medicina,1,Materia 1.7 de Medicina,MED-17,
+Medicina,2,Materia 2.1 de Medicina,MED-21,MED-11
+Medicina,2,Materia 2.2 de Medicina,MED-22,MED-12
+Medicina,2,Materia 2.3 de Medicina,MED-23,MED-13
+Medicina,2,Materia 2.4 de Medicina,MED-24,MED-14
+Medicina,2,Materia 2.5 de Medicina,MED-25,MED-15
+Medicina,2,Materia 2.6 de Medicina,MED-26,MED-16
+Medicina,2,Materia 2.7 de Medicina,MED-27,MED-17
+Medicina,3,Materia 3.1 de Medicina,MED-31,MED-21
+Medicina,3,Materia 3.2 de Medicina,MED-32,MED-22
+Medicina,3,Materia 3.3 de Medicina,MED-33,MED-23
+Medicina,3,Materia 3.4 de Medicina,MED-34,MED-24
+Medicina,3,Materia 3.5 de Medicina,MED-35,MED-25
+Medicina,3,Materia 3.6 de Medicina,MED-36,MED-26
+Medicina,3,Materia 3.7 de Medicina,MED-37,MED-27
+Medicina,4,Materia 4.1 de Medicina,MED-41,MED-31
+Medicina,4,Materia 4.2 de Medicina,MED-42,MED-32
+Medicina,4,Materia 4.3 de Medicina,MED-43,MED-33
+Medicina,4,Materia 4.4 de Medicina,MED-44,MED-34
+Medicina,4,Materia 4.5 de Medicina,MED-45,MED-35
+Medicina,4,Materia 4.6 de Medicina,MED-46,MED-36
+Medicina,4,Materia 4.7 de Medicina,MED-47,MED-37
+Medicina,5,Materia 5.1 de Medicina,MED-51,MED-41
+Medicina,5,Materia 5.2 de Medicina,MED-52,MED-42
+Medicina,5,Materia 5.3 de Medicina,MED-53,MED-43
+Medicina,5,Materia 5.4 de Medicina,MED-54,MED-44
+Medicina,5,Materia 5.5 de Medicina,MED-55,MED-45
+Medicina,5,Materia 5.6 de Medicina,MED-56,MED-46
+Medicina,5,Materia 5.7 de Medicina,MED-57,MED-47
+Medicina,6,Materia 6.1 de Medicina,MED-61,MED-51
+Medicina,6,Materia 6.2 de Medicina,MED-62,MED-52
+Medicina,6,Materia 6.3 de Medicina,MED-63,MED-53
+Medicina,6,Materia 6.4 de Medicina,MED-64,MED-54
+Medicina,6,Materia 6.5 de Medicina,MED-65,MED-55
+Medicina,6,Materia 6.6 de Medicina,MED-66,MED-56
+Medicina,6,Materia 6.7 de Medicina,MED-67,MED-57
+Medicina,7,Materia 7.1 de Medicina,MED-71,MED-61
+Medicina,7,Materia 7.2 de Medicina,MED-72,MED-62
+Medicina,7,Materia 7.3 de Medicina,MED-73,MED-63
+Medicina,7,Materia 7.4 de Medicina,MED-74,MED-64
+Medicina,7,Materia 7.5 de Medicina,MED-75,MED-65
+Medicina,7,Materia 7.6 de Medicina,MED-76,MED-66
+Medicina,7,Materia 7.7 de Medicina,MED-77,MED-67
+Medicina,8,Materia 8.1 de Medicina,MED-81,MED-71
+Medicina,8,Materia 8.2 de Medicina,MED-82,MED-72
+Medicina,8,Materia 8.3 de Medicina,MED-83,MED-73
+Medicina,8,Materia 8.4 de Medicina,MED-84,MED-74
+Medicina,8,Materia 8.5 de Medicina,MED-85,MED-75
+Medicina,8,Materia 8.6 de Medicina,MED-86,MED-76
+Medicina,8,Materia 8.7 de Medicina,MED-87,MED-77
+Medicina,9,Materia 9.1 de Medicina,MED-91,MED-81
+Medicina,9,Materia 9.2 de Medicina,MED-92,MED-82
+Medicina,9,Materia 9.3 de Medicina,MED-93,MED-83
+Medicina,9,Materia 9.4 de Medicina,MED-94,MED-84
+Medicina,9,Materia 9.5 de Medicina,MED-95,MED-85
+Medicina,9,Materia 9.6 de Medicina,MED-96,MED-86
+Medicina,9,Materia 9.7 de Medicina,MED-97,MED-87
+Medicina,10,Materia 10.1 de Medicina,MED-101,MED-91
+Medicina,10,Materia 10.2 de Medicina,MED-102,MED-92
+Medicina,10,Materia 10.3 de Medicina,MED-103,MED-93
+Medicina,10,Materia 10.4 de Medicina,MED-104,MED-94
+Medicina,10,Materia 10.5 de Medicina,MED-105,MED-95
+Medicina,10,Materia 10.6 de Medicina,MED-106,MED-96
+Medicina,10,Materia 10.7 de Medicina,MED-107,MED-97
+Psicologia,1,Materia 1.1 de Psicologia,PSI-11,
+Psicologia,1,Materia 1.2 de Psicologia,PSI-12,
+Psicologia,1,Materia 1.3 de Psicologia,PSI-13,
+Psicologia,1,Materia 1.4 de Psicologia,PSI-14,
+Psicologia,1,Materia 1.5 de Psicologia,PSI-15,
+Psicologia,1,Materia 1.6 de Psicologia,PSI-16,
+Psicologia,1,Materia 1.7 de Psicologia,PSI-17,
+Psicologia,2,Materia 2.1 de Psicologia,PSI-21,PSI-11
+Psicologia,2,Materia 2.2 de Psicologia,PSI-22,PSI-12
+Psicologia,2,Materia 2.3 de Psicologia,PSI-23,PSI-13
+Psicologia,2,Materia 2.4 de Psicologia,PSI-24,PSI-14
+Psicologia,2,Materia 2.5 de Psicologia,PSI-25,PSI-15
+Psicologia,2,Materia 2.6 de Psicologia,PSI-26,PSI-16
+Psicologia,2,Materia 2.7 de Psicologia,PSI-27,PSI-17
+Psicologia,3,Materia 3.1 de Psicologia,PSI-31,PSI-21
+Psicologia,3,Materia 3.2 de Psicologia,PSI-32,PSI-22
+Psicologia,3,Materia 3.3 de Psicologia,PSI-33,PSI-23
+Psicologia,3,Materia 3.4 de Psicologia,PSI-34,PSI-24
+Psicologia,3,Materia 3.5 de Psicologia,PSI-35,PSI-25
+Psicologia,3,Materia 3.6 de Psicologia,PSI-36,PSI-26
+Psicologia,3,Materia 3.7 de Psicologia,PSI-37,PSI-27
+Psicologia,4,Materia 4.1 de Psicologia,PSI-41,PSI-31
+Psicologia,4,Materia 4.2 de Psicologia,PSI-42,PSI-32
+Psicologia,4,Materia 4.3 de Psicologia,PSI-43,PSI-33
+Psicologia,4,Materia 4.4 de Psicologia,PSI-44,PSI-34
+Psicologia,4,Materia 4.5 de Psicologia,PSI-45,PSI-35
+Psicologia,4,Materia 4.6 de Psicologia,PSI-46,PSI-36
+Psicologia,4,Materia 4.7 de Psicologia,PSI-47,PSI-37
+Psicologia,5,Materia 5.1 de Psicologia,PSI-51,PSI-41
+Psicologia,5,Materia 5.2 de Psicologia,PSI-52,PSI-42
+Psicologia,5,Materia 5.3 de Psicologia,PSI-53,PSI-43
+Psicologia,5,Materia 5.4 de Psicologia,PSI-54,PSI-44
+Psicologia,5,Materia 5.5 de Psicologia,PSI-55,PSI-45
+Psicologia,5,Materia 5.6 de Psicologia,PSI-56,PSI-46
+Psicologia,5,Materia 5.7 de Psicologia,PSI-57,PSI-47
+Psicologia,6,Materia 6.1 de Psicologia,PSI-61,PSI-51
+Psicologia,6,Materia 6.2 de Psicologia,PSI-62,PSI-52
+Psicologia,6,Materia 6.3 de Psicologia,PSI-63,PSI-53
+Psicologia,6,Materia 6.4 de Psicologia,PSI-64,PSI-54
+Psicologia,6,Materia 6.5 de Psicologia,PSI-65,PSI-55
+Psicologia,6,Materia 6.6 de Psicologia,PSI-66,PSI-56
+Psicologia,6,Materia 6.7 de Psicologia,PSI-67,PSI-57
+Psicologia,7,Materia 7.1 de Psicologia,PSI-71,PSI-61
+Psicologia,7,Materia 7.2 de Psicologia,PSI-72,PSI-62
+Psicologia,7,Materia 7.3 de Psicologia,PSI-73,PSI-63
+Psicologia,7,Materia 7.4 de Psicologia,PSI-74,PSI-64
+Psicologia,7,Materia 7.5 de Psicologia,PSI-75,PSI-65
+Psicologia,7,Materia 7.6 de Psicologia,PSI-76,PSI-66
+Psicologia,7,Materia 7.7 de Psicologia,PSI-77,PSI-67
+Psicologia,8,Materia 8.1 de Psicologia,PSI-81,PSI-71
+Psicologia,8,Materia 8.2 de Psicologia,PSI-82,PSI-72
+Psicologia,8,Materia 8.3 de Psicologia,PSI-83,PSI-73
+Psicologia,8,Materia 8.4 de Psicologia,PSI-84,PSI-74
+Psicologia,8,Materia 8.5 de Psicologia,PSI-85,PSI-75
+Psicologia,8,Materia 8.6 de Psicologia,PSI-86,PSI-76
+Psicologia,8,Materia 8.7 de Psicologia,PSI-87,PSI-77
+Psicologia,9,Materia 9.1 de Psicologia,PSI-91,PSI-81
+Psicologia,9,Materia 9.2 de Psicologia,PSI-92,PSI-82
+Psicologia,9,Materia 9.3 de Psicologia,PSI-93,PSI-83
+Psicologia,9,Materia 9.4 de Psicologia,PSI-94,PSI-84
+Psicologia,9,Materia 9.5 de Psicologia,PSI-95,PSI-85
+Psicologia,9,Materia 9.6 de Psicologia,PSI-96,PSI-86
+Psicologia,9,Materia 9.7 de Psicologia,PSI-97,PSI-87
+Psicologia,10,Materia 10.1 de Psicologia,PSI-101,PSI-91
+Psicologia,10,Materia 10.2 de Psicologia,PSI-102,PSI-92
+Psicologia,10,Materia 10.3 de Psicologia,PSI-103,PSI-93
+Psicologia,10,Materia 10.4 de Psicologia,PSI-104,PSI-94
+Psicologia,10,Materia 10.5 de Psicologia,PSI-105,PSI-95
+Psicologia,10,Materia 10.6 de Psicologia,PSI-106,PSI-96
+Psicologia,10,Materia 10.7 de Psicologia,PSI-107,PSI-97
+Administracion,1,Materia 1.1 de Administracion,ADM-11,
+Administracion,1,Materia 1.2 de Administracion,ADM-12,
+Administracion,1,Materia 1.3 de Administracion,ADM-13,
+Administracion,1,Materia 1.4 de Administracion,ADM-14,
+Administracion,1,Materia 1.5 de Administracion,ADM-15,
+Administracion,1,Materia 1.6 de Administracion,ADM-16,
+Administracion,1,Materia 1.7 de Administracion,ADM-17,
+Administracion,2,Materia 2.1 de Administracion,ADM-21,ADM-11
+Administracion,2,Materia 2.2 de Administracion,ADM-22,ADM-12
+Administracion,2,Materia 2.3 de Administracion,ADM-23,ADM-13
+Administracion,2,Materia 2.4 de Administracion,ADM-24,ADM-14
+Administracion,2,Materia 2.5 de Administracion,ADM-25,ADM-15
+Administracion,2,Materia 2.6 de Administracion,ADM-26,ADM-16
+Administracion,2,Materia 2.7 de Administracion,ADM-27,ADM-17
+Administracion,3,Materia 3.1 de Administracion,ADM-31,ADM-21
+Administracion,3,Materia 3.2 de Administracion,ADM-32,ADM-22
+Administracion,3,Materia 3.3 de Administracion,ADM-33,ADM-23
+Administracion,3,Materia 3.4 de Administracion,ADM-34,ADM-24
+Administracion,3,Materia 3.5 de Administracion,ADM-35,ADM-25
+Administracion,3,Materia 3.6 de Administracion,ADM-36,ADM-26
+Administracion,3,Materia 3.7 de Administracion,ADM-37,ADM-27
+Administracion,4,Materia 4.1 de Administracion,ADM-41,ADM-31
+Administracion,4,Materia 4.2 de Administracion,ADM-42,ADM-32
+Administracion,4,Materia 4.3 de Administracion,ADM-43,ADM-33
+Administracion,4,Materia 4.4 de Administracion,ADM-44,ADM-34
+Administracion,4,Materia 4.5 de Administracion,ADM-45,ADM-35
+Administracion,4,Materia 4.6 de Administracion,ADM-46,ADM-36
+Administracion,4,Materia 4.7 de Administracion,ADM-47,ADM-37
+Administracion,5,Materia 5.1 de Administracion,ADM-51,ADM-41
+Administracion,5,Materia 5.2 de Administracion,ADM-52,ADM-42
+Administracion,5,Materia 5.3 de Administracion,ADM-53,ADM-43
+Administracion,5,Materia 5.4 de Administracion,ADM-54,ADM-44
+Administracion,5,Materia 5.5 de Administracion,ADM-55,ADM-45
+Administracion,5,Materia 5.6 de Administracion,ADM-56,ADM-46
+Administracion,5,Materia 5.7 de Administracion,ADM-57,ADM-47
+Administracion,6,Materia 6.1 de Administracion,ADM-61,ADM-51
+Administracion,6,Materia 6.2 de Administracion,ADM-62,ADM-52
+Administracion,6,Materia 6.3 de Administracion,ADM-63,ADM-53
+Administracion,6,Materia 6.4 de Administracion,ADM-64,ADM-54
+Administracion,6,Materia 6.5 de Administracion,ADM-65,ADM-55
+Administracion,6,Materia 6.6 de Administracion,ADM-66,ADM-56
+Administracion,6,Materia 6.7 de Administracion,ADM-67,ADM-57
+Administracion,7,Materia 7.1 de Administracion,ADM-71,ADM-61
+Administracion,7,Materia 7.2 de Administracion,ADM-72,ADM-62
+Administracion,7,Materia 7.3 de Administracion,ADM-73,ADM-63
+Administracion,7,Materia 7.4 de Administracion,ADM-74,ADM-64
+Administracion,7,Materia 7.5 de Administracion,ADM-75,ADM-65
+Administracion,7,Materia 7.6 de Administracion,ADM-76,ADM-66
+Administracion,7,Materia 7.7 de Administracion,ADM-77,ADM-67
+Administracion,8,Materia 8.1 de Administracion,ADM-81,ADM-71
+Administracion,8,Materia 8.2 de Administracion,ADM-82,ADM-72
+Administracion,8,Materia 8.3 de Administracion,ADM-83,ADM-73
+Administracion,8,Materia 8.4 de Administracion,ADM-84,ADM-74
+Administracion,8,Materia 8.5 de Administracion,ADM-85,ADM-75
+Administracion,8,Materia 8.6 de Administracion,ADM-86,ADM-76
+Administracion,8,Materia 8.7 de Administracion,ADM-87,ADM-77
+Administracion,9,Materia 9.1 de Administracion,ADM-91,ADM-81
+Administracion,9,Materia 9.2 de Administracion,ADM-92,ADM-82
+Administracion,9,Materia 9.3 de Administracion,ADM-93,ADM-83
+Administracion,9,Materia 9.4 de Administracion,ADM-94,ADM-84
+Administracion,9,Materia 9.5 de Administracion,ADM-95,ADM-85
+Administracion,9,Materia 9.6 de Administracion,ADM-96,ADM-86
+Administracion,9,Materia 9.7 de Administracion,ADM-97,ADM-87
+Administracion,10,Materia 10.1 de Administracion,ADM-101,ADM-91
+Administracion,10,Materia 10.2 de Administracion,ADM-102,ADM-92
+Administracion,10,Materia 10.3 de Administracion,ADM-103,ADM-93
+Administracion,10,Materia 10.4 de Administracion,ADM-104,ADM-94
+Administracion,10,Materia 10.5 de Administracion,ADM-105,ADM-95
+Administracion,10,Materia 10.6 de Administracion,ADM-106,ADM-96
+Administracion,10,Materia 10.7 de Administracion,ADM-107,ADM-97

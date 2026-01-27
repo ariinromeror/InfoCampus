@@ -1,99 +1,110 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.conf import settings
 
-# --- INFRAESTRUCTURA ACADÉMICA ---
-
+# --- 1. INFRAESTRUCTURA Y CARRERAS ---
 class Carrera(models.Model):
     nombre = models.CharField(max_length=100)
     codigo = models.CharField(max_length=10, unique=True)
-    descripcion = models.TextField(blank=True, null=True)
-
+    
     def __str__(self):
-        return f"{self.codigo} - {self.nombre}"
+        return f"{self.nombre} ({self.codigo})"
 
-# --- USUARIO EXTENDIDO (EL MOTOR DE ROLES) ---
-
+# --- 2. USUARIOS Y CONTROL DE ACCESO (RBAC) ---
 class Usuario(AbstractUser):
     ROLES = (
         ('director', 'Director'),
         ('coordinador', 'Coordinador'),
-        ('tesorero', 'Tesorero'), # Añadido para el Punto 4.1
+        ('tesorero', 'Tesorero'),
         ('administrativo', 'Administrativo'),
         ('profesor', 'Profesor'),
         ('estudiante', 'Estudiante'),
     )
-    
     rol = models.CharField(max_length=20, choices=ROLES, default='estudiante')
     dni = models.CharField(max_length=20, unique=True, null=True, blank=True)
     
-    # Flags de Control (Visión 10 años)
+    # Lógica de Negocio
     en_mora = models.BooleanField(default=False)
     es_becado = models.BooleanField(default=False)
-    porcentaje_beca = models.IntegerField(default=0) # Para el Punto 4.1
+    porcentaje_beca = models.IntegerField(default=0)
     
-    foto = models.ImageField(upload_to='perfiles/', null=True, blank=True)
-    carrera = models.ForeignKey(Carrera, on_delete=models.SET_NULL, null=True, blank=True, related_name='usuarios')
-    
-    # Seguridad (Punto 2.4)
-    dispositivo_id = models.CharField(max_length=255, null=True, blank=True)
+    carrera = models.ForeignKey(
+        Carrera, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='usuarios'
+    )
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.get_rol_display()})"
+        return f"{self.username} - {self.get_rol_display()}"
 
-# --- ACADÉMICO ---
-
+# --- 3. MALLA CURRICULAR Y MATERIAS ---
 class Materia(models.Model):
     nombre = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=10, unique=True, null=True)
-    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE, related_name='materias')
-    profesor = models.ForeignKey(
-        Usuario, 
+    codigo = models.CharField(max_length=20, unique=True)
+    carrera = models.ForeignKey(
+        Carrera, 
+        on_delete=models.CASCADE, 
+        related_name='materias'
+    )
+    nivel = models.IntegerField(default=1)  # Del 1 al 10
+    
+    prerrequisito = models.ForeignKey(
+        'self', 
         on_delete=models.SET_NULL, 
         null=True, 
-        limit_choices_to={'rol': 'profesor'},
-        related_name='materias_dictadas'
-    )
-    # Punto 2.1: El método de asistencia se define por materia
-    metodo_asistencia_default = models.CharField(
-        max_length=20, 
-        choices=(('qr_dinamico', 'QR Dinámico'), ('qr_estatico', 'QR Estático'), ('manual', 'Manual')),
-        default='manual'
+        blank=True, 
+        related_name='sucesores'
     )
 
     def __str__(self):
-        return f"{self.nombre} ({self.carrera.codigo})"
+        return f"[{self.codigo}] {self.nombre} - Nivel {self.nivel}"
 
-# --- CONTROL DE NOTAS Y AUDITORÍA (PUNTO 2.3) ---
-
-class Nota(models.Model):
-    estudiante = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='notas_academicas', limit_choices_to={'rol': 'estudiante'})
-    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
-    valor = models.DecimalField(max_digits=4, decimal_places=2)
-    
-    # Auditoría (Indispensable a 10 años)
-    fecha_registro = models.DateTimeField(auto_now_add=True)
-    fecha_modificacion = models.DateTimeField(auto_now=True)
-    modificado_por = models.ForeignKey(
-        Usuario, 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        related_name='notas_editadas'
+# --- 4. GESTIÓN ACADÉMICA E HISTORIAL ---
+class CargaAcademica(models.Model):
+    DIAS = (
+        ('LU', 'Lunes'), ('MA', 'Martes'), ('MI', 'Miércoles'),
+        ('JU', 'Jueves'), ('VI', 'Viernes'), ('SA', 'Sábado')
     )
 
+    # El Estudiante es el centro de esta tabla para el historial
+    estudiante = models.ForeignKey(
+        Usuario, 
+        on_delete=models.CASCADE, 
+        limit_choices_to={'rol': 'estudiante'},
+        related_name='inscripciones',
+        null=True, blank=True
+    )
+    
+    # El Profesor que dicta (opcional en historial)
+    profesor = models.ForeignKey(
+        Usuario, 
+        on_delete=models.CASCADE, 
+        limit_choices_to={'rol': 'profesor'},
+        related_name='cargas_docentes',
+        null=True, blank=True
+    )
+    
+    materia = models.ForeignKey(
+        Materia, 
+        on_delete=models.CASCADE, 
+        related_name='asignaciones'
+    )
+    
+    # Datos de la cursada
+    seccion = models.CharField(max_length=10, default='A')
+    aula = models.CharField(max_length=50, blank=True, null=True)
+    dia = models.CharField(max_length=2, choices=DIAS, default='LU')
+    hora_inicio = models.TimeField(null=True, blank=True)
+    
+    # Datos del Periodo y Rendimiento
+    periodo_lectivo = models.CharField(max_length=20, default='2026-01')
+    nota_final = models.FloatField(default=0.0) # Escala 0 a 10
+    pagado = models.BooleanField(default=False)
+
     class Meta:
-        unique_together = ('estudiante', 'materia') # Un estudiante solo tiene una nota por materia
+        verbose_name_plural = "Cargas Académicas"
 
-# --- ASISTENCIA ANTI-FRAUDE (PUNTO 2.4) ---
-
-class Asistencia(models.Model):
-    estudiante = models.ForeignKey(Usuario, on_delete=models.CASCADE, limit_choices_to={'rol': 'estudiante'})
-    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
-    fecha = models.DateField(auto_now_add=True)
-    hora = models.TimeField(auto_now_add=True)
-    latitud = models.FloatField(null=True, blank=True) # Para validación GPS futura
-    longitud = models.FloatField(null=True, blank=True)
-    validado = models.BooleanField(default=True)
-
-    class Meta:
-        unique_together = ('estudiante', 'materia', 'fecha')
+    def __str__(self):
+        nombre_est = self.estudiante.username if self.estudiante else "Sin asignar"
+        return f"{nombre_est} - {self.materia.nombre} ({self.periodo_lectivo})"

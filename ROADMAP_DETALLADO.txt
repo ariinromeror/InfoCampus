@@ -1,40 +1,52 @@
-============================================================
-       MASTER ROADMAP: INFO CAMPUS SaaS (VISIÓN 2036)
-============================================================
+================================================================
+          CONSTITUCIÓN INFO_CAMPUS: ROADMAP DEFINITIVO
+================================================================
+ESTADO: Backend Core Sellado (Models Versión Final)
+FILOSOFÍA: Construcción Lineal (No retroceder, solo avanzar)
 
-FASE 1: CIMENTACIÓN, SEGURIDAD Y RBAC (EL CORAZÓN)
-------------------------------------------------------------
-1.1 Bóveda de Seguridad: Configuración de .env, SECRET_KEY y protección de datos sensibles.
-1.2 Arquitectura de Datos Pro: Carreras, Materias, Inscripciones y Notas con integridad referencial.
-1.3 Motor de Permisos (RBAC): Sincronización de Grupos de Django (Director, Tesorero, Profe, etc.) con React.
-1.4 Automatización de Estructura: Scripts para creación automática de Grupos y Permisos base en Django.
-1.5 El 'Golden Dataset': Carga masiva mediante CSV de casos maestros (Becado, Mora, Staff, Alumni) para pruebas de integridad.
+----------------------------------------------------------------
+1. ARQUITECTURA E INVARIANTES (LO QUE YA NO SE TOCA)
+----------------------------------------------------------------
+* MODELO USUARIO: RBAC integrado con roles fijos.
+  - Campos clave: 'rol', 'en_mora', 'carrera'.
+* MODELO ACADÉMICO: 
+  - Malla Curricular: Materias con 'nivel' (1-10) y 'prerrequisito'.
+  - Carga Académica: Gestión de horarios ('dia', 'hora_inicio') y 
+    evitación de colisiones físicas mediante unique_together.
+* INTEGRIDAD: El sistema soporta 350+ registros desde el día 1.
 
-FASE 2: LÓGICA DE NEGOCIO Y "MODO CAMALEÓN"
-------------------------------------------------------------
-2.1 Switch de Asistencia: Lógica para QR Dinámico, Estático o Lista Manual configurable por materia.
-2.2 El Muro de Pago (Gatekeeper): Bloqueo automático de módulos basado en el flag 'en_mora' y 'tipo_beca'.
-2.3 Trazabilidad Inmutable: Implementación de Logs de Auditoría (Quién cambió qué nota, cuándo y desde dónde).
-2.4 Validación de Dispositivo: Registro de ID de hardware para evitar fraudes en marcado de asistencia.
+----------------------------------------------------------------
+2. LÓGICA DE SEGURIDAD (FASE ACTUAL)
+----------------------------------------------------------------
+* EL "GATEKEEPER" (Muro de Pago): 
+  - Regla: Si en_mora == True, el API Endpoint de materias 
+    retorna vacío. Cero acceso hasta que Tesorería cambie el flag.
+* RBAC FILTRADO: 
+  - Estudiante ve: Materias de su carrera/nivel.
+  - Profesor ve: Sus secciones asignadas en CargaAcademica.
 
-FASE 3: DASHBOARDS ADAPTATIVOS Y MÓDULOS (UX/UI ELITE)
-------------------------------------------------------------
-3.1 Interfaz Camaleón: UI que se autoconstruye dinámicamente según el mapa de permisos del usuario.
-3.2 Panel de Superusuario (Control Tower): Monitoreo global de ingresos, deserción y logs de sistema.
-3.3 Módulos Independientes: Separación física de vistas (Estudiante, Profesor, Tesorería, Registro Académico).
+----------------------------------------------------------------
+3. PRÓXIMAS FASES (EL PLAN DE ATAQUE)
+----------------------------------------------------------------
+FASE A: AUTENTICACIÓN JWT (SEGURIDAD DE ACCESO)
+  - Configuración de SimpleJWT. Login que entrega Rol y Token.
+  
+FASE B: DASHBOARDS REACT (UI DINÁMICA)
+  - Estudiante: Vista de "Mi Semestre".
+  - Profesor: Vista de "Mis Clases Hoy" (usa campos dia/hora).
+  - Tesorería: Vista "Panel de Cobros" (Modifica el flag en_mora).
 
-FASE 4: MÓDULOS FINANCIEROS Y DE CERTIFICACIÓN (ESCABILIDAD)
-------------------------------------------------------------
-4.1 Tesorería Avanzada: Conciliación de pagos, planes de prórroga y estados de cuenta históricos.
-4.2 Certificación Digital: Generador de Boletas y Diplomas PDF con Hash de Verificación Único (Antifraude).
-4.3 Gestión de Infraestructura: Control de aulas físicas, laboratorios y horarios para evitar colisiones.
+FASE C: VISIÓN 2036 (ESCALABILIDAD FUTURA)
+  - Asistencia por QR (usando el campo dia/hora ya creado).
+  - Reportes en PDF con Hash de verificación.
 
-FASE 5: PREDICTIVIDAD Y LANZAMIENTO (VISIÓN 10 AÑOS)
-------------------------------------------------------------
-5.1 IA de Retención: Alertas tempranas para alumnos en riesgo académico basadas en patrones históricos.
-5.2 Versionado Curricular: Soporte para cambios de plan de estudios sin afectar el historial de alumnos antiguos.
-5.3 Deploy y Alta Disponibilidad: Configuración de servidor con SSL y políticas de respaldo de base de datos.
+----------------------------------------------------------------
+4. REGLAS DE ORO PARA EL DESARROLLADOR
+----------------------------------------------------------------
+1. No se agregan campos a Models.py. Si falta algo, se maneja con 
+   la lógica de los campos existentes.
+2. El frontend no decide qué ver; el Backend filtra según el Rol.
+3. Todo nuevo usuario debe ser creado con un Rol definido.
+================================================================
 
-============================================================
-ESTADO ACTUAL: FASE 1.5 - GENERANDO 'GOLDEN DATASET'
-============================================================
+
