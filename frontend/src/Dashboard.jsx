@@ -1,34 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useAuth } from './context/AuthContext';
 import { 
-  LayoutDashboard, 
   BookOpen, 
-  QrCode, 
-  LogOut, 
-  User, 
   ShieldAlert,
   CheckCircle2,
   Loader2,
-  CreditCard
+  CreditCard,
+  TrendingUp,
+  AlertCircle
 } from 'lucide-react';
 
-const Dashboard = ({ user, onLogout }) => {
+const Dashboard = () => {
+  const { user } = useAuth();
   const [materias, setMaterias] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState('inicio');
 
   const API_URL = "http://127.0.0.1:8000/api/";
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const res = await axios.get(`${API_URL}mis-materias/`);
-        setMaterias(res.data.map(item => ({
-          id: item.id,
-          nombre: item.nombre,
-          profesor: item.profesor_nombre || "Catedrático Asignado", 
-          progreso: item.nota_valor ? parseFloat(item.nota_valor) * 10 : 0
-        })));
+        // Usamos el endpoint que definimos en el backend
+        const response = await fetch(`${API_URL}historial/`, {
+          headers: {
+            'Authorization': `Bearer ${user?.access}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const data = await response.json();
+        
+        if (response.ok) {
+          setMaterias(data.map(item => ({
+            id: item.id,
+            nombre: item.materia_nombre,
+            profesor: item.profesor_nombre || "Catedrático Asignado", 
+            progreso: item.nota_final ? parseFloat(item.nota_final) * 10 : 0,
+            nota: item.nota_final
+          })));
+        }
       } catch (err) {
         console.error("Error al cargar datos:", err);
       } finally {
@@ -36,134 +45,113 @@ const Dashboard = ({ user, onLogout }) => {
       }
     };
 
-    // Solo cargamos datos si el usuario no tiene deudas
-    if (user && !(user.en_mora && user.rol === 'estudiante')) {
+    if (user && !user.en_mora) {
       fetchDatos();
     } else {
       setLoading(false);
     }
   }, [user]);
 
-  const isMora = user?.en_mora && user?.rol === 'estudiante';
+  // Si está cargando, mostramos el spinner estético
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <Loader2 className="animate-spin text-red-600" size={48} />
+        <p className="text-slate-500 font-bold animate-pulse">Sincronizando con el servidor académico...</p>
+      </div>
+    );
+  }
 
+  // CASO A: BLOQUEO POR MORA
+  if (user?.en_mora) {
+    return (
+      <div className="max-w-2xl mx-auto mt-10 animate-in fade-in zoom-in duration-500">
+        <div className="bg-white border-2 border-red-100 p-12 rounded-[40px] shadow-2xl text-center">
+          <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8 ring-8 ring-red-50/50">
+            <ShieldAlert size={48} className="text-red-600" />
+          </div>
+          <h1 className="text-3xl font-black text-slate-900 mb-4 tracking-tighter uppercase">Acceso Restringido</h1>
+          <p className="text-slate-500 mb-10 leading-relaxed">
+            Estimado/a <strong>{user.username}</strong>, tu acceso al panel de calificaciones ha sido suspendido por pagos pendientes.
+          </p>
+          <button 
+            onClick={() => window.open('https://pagos.infocampus.com', '_blank')} 
+            className="w-full bg-red-600 text-white py-5 rounded-2xl font-black hover:bg-red-700 transition-all shadow-xl shadow-red-200 flex items-center justify-center gap-3 text-lg"
+          >
+            <CreditCard size={24} /> REGULARIZAR SITUACIÓN
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // CASO B: DASHBOARD ACTIVO
   return (
-    <div className="flex min-h-screen bg-slate-100 font-sans">
+    <div className="space-y-8 animate-in fade-in duration-700">
       
-      {/* SIDEBAR - Panel Lateral Izquierdo */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col p-6 z-20 shadow-2xl">
-        <div className="text-2xl font-black tracking-tighter mb-10 text-blue-500">
-          INFO<span className="text-white">CAMPUS</span>
-        </div>
-        
-        <nav className="flex-1 space-y-2">
-          <div 
-            onClick={() => !isMora && setView('inicio')} 
-            className={`flex items-center gap-3 p-3 rounded-xl transition-all ${isMora ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer hover:bg-slate-800'} ${view === 'inicio' && !isMora ? 'bg-blue-600 shadow-lg' : 'text-slate-400'}`}
-          >
-            <LayoutDashboard size={20} /> Inicio
-          </div>
-          <div 
-            onClick={() => !isMora && setView('materias')} 
-            className={`flex items-center gap-3 p-3 rounded-xl transition-all ${isMora ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer hover:bg-slate-800'} ${view === 'materias' && !isMora ? 'bg-blue-600 shadow-lg' : 'text-slate-400'}`}
-          >
-            <BookOpen size={20} /> Mis Materias
-          </div>
-        </nav>
-        
-        <div onClick={onLogout} className="flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-red-500/10 text-red-400 mt-auto transition-colors font-bold">
-          <LogOut size={20} /> Cerrar Sesión
-        </div>
-      </aside>
-
-      {/* ÁREA DE CONTENIDO PRINCIPAL */}
-      <main className="flex-1 flex flex-col relative overflow-hidden bg-white">
-        
-        {/* IMAGEN DE FONDO - Recuperada de la carpeta public */}
-        <div 
-          className="absolute inset-0 z-0 opacity-15 bg-cover bg-center"
-          style={{ backgroundImage: "url('/campus-bg.jpg')" }}
-        ></div>
-
-        {/* HEADER / BARRA SUPERIOR */}
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 z-10">
+      {/* 1. TARJETAS DE RESUMEN (Widgets rápidos) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4">
+          <div className="bg-red-50 p-3 rounded-2xl text-red-600"><TrendingUp size={24}/></div>
           <div>
-            <h2 className="text-xl font-bold text-slate-800">Portal Estudiantil</h2>
-            <p className="text-[10px] text-slate-400 font-black tracking-[3px] uppercase">{user?.carrera_nombre || 'Informática'}</p>
+            <p className="text-xs font-bold text-slate-400 uppercase">Promedio General</p>
+            <p className="text-2xl font-black text-slate-800">8.5</p>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <h4 className="text-sm font-bold text-slate-900 leading-tight">{user?.first_name} {user?.last_name}</h4>
-              <span className={`text-[9px] px-2 py-0.5 rounded-full font-black tracking-tighter ${isMora ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
-                {isMora ? 'ACCESO RESTRINGIDO' : 'CUENTA ACTIVA'}
-              </span>
-            </div>
-            <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 border border-slate-200 shadow-sm">
-              <User size={20} />
-            </div>
+        </div>
+        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4">
+          <div className="bg-red-50 p-3 rounded-2xl text-red-600"><BookOpen size={24}/></div>
+          <div>
+            <p className="text-xs font-bold text-slate-400 uppercase">Materias Activas</p>
+            <p className="text-2xl font-black text-slate-800">{materias.length}</p>
           </div>
-        </header>
+        </div>
+        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4">
+          <div className="bg-emerald-50 p-3 rounded-2xl text-emerald-600"><CheckCircle2 size={24}/></div>
+          <div>
+            <p className="text-xs font-bold text-slate-400 uppercase">Estado Cuenta</p>
+            <p className="text-2xl font-black text-emerald-600 italic">Al día</p>
+          </div>
+        </div>
+      </div>
 
-        {/* CUERPO DEL DASHBOARD */}
-        <div className="p-8 flex-1 overflow-y-auto z-10">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center h-full gap-4">
-              <Loader2 className="animate-spin text-blue-600" size={40} />
-              <p className="text-slate-400 font-bold text-sm">Validando información académica...</p>
-            </div>
-          ) : isMora ? (
-            
-            /* VISTA DE BLOQUEO POR MORA (PEDRO DEUDOR) */
-            <div className="h-full flex items-center justify-center animate-in fade-in zoom-in duration-500">
-              <div className="max-w-md w-full bg-white border border-slate-200 p-12 rounded-[40px] shadow-2xl text-center">
-                <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
-                  <ShieldAlert size={48} className="text-red-600" />
+      {/* 2. LISTADO DE MATERIAS */}
+      <div>
+        <h3 className="text-xl font-black text-slate-800 mb-6 flex items-center gap-2">
+          <AlertCircle className="text-red-600" /> Rendimiento por Asignatura
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {materias.length > 0 ? materias.map((m) => (
+            <div key={m.id} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="font-bold text-slate-800 leading-tight group-hover:text-red-700 transition-colors uppercase text-sm">{m.nombre}</h4>
+                <div className="text-right">
+                  <span className="text-xs font-black text-red-600">NOTA: {m.nota}</span>
                 </div>
-                <h1 className="text-3xl font-black text-slate-900 mb-4 italic tracking-tighter">¡ALTO AHÍ!</h1>
-                <p className="text-slate-500 mb-10 leading-relaxed text-sm">
-                  Tu acceso académico ha sido suspendido temporalmente por falta de pago. Por favor, regulariza tu situación en Tesorería.
-                </p>
-                <button 
-                  onClick={() => window.location.href = 'https://pagos.infocampus.com'} 
-                  className="w-full bg-red-600 text-white py-5 rounded-2xl font-black hover:bg-red-700 transition-all shadow-xl shadow-red-200 flex items-center justify-center gap-3 text-lg"
-                >
-                  <CreditCard size={24} /> PAGAR EN LÍNEA
-                </button>
+              </div>
+              
+              {/* Barra de Progreso Roja */}
+              <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden mb-4">
+                <div 
+                  className="h-full bg-red-600 rounded-full transition-all duration-1000 ease-out" 
+                  style={{ width: `${m.progreso}%` }}
+                ></div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-500 font-bold">
+                  {m.profesor.charAt(0)}
+                </div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase">PROF. {m.profesor}</span>
               </div>
             </div>
-          ) : (
-            
-            /* VISTA DE MATERIAS (MARIA EXCELENCIA) */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {materias.length > 0 ? materias.map((m) => (
-                <div key={m.id} className="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                  <div className="flex justify-between items-start mb-4">
-                    <h4 className="font-bold text-slate-800 leading-tight group-hover:text-blue-600 transition-colors">{m.nombre}</h4>
-                    {m.progreso >= 60 && <CheckCircle2 size={18} className="text-emerald-500" />}
-                  </div>
-                  
-                  {/* Barra de Progreso */}
-                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden mb-3">
-                    <div 
-                      className="h-full bg-blue-600 transition-all duration-1000 ease-out" 
-                      style={{ width: `${m.progreso}%` }}
-                    ></div>
-                  </div>
-                  
-                  <div className="flex justify-between text-[10px] font-black text-slate-400">
-                    <span>RENDIMIENTO ACADÉMICO</span>
-                    <span className="text-blue-600">PROMEDIO: {m.progreso / 10}</span>
-                  </div>
-                </div>
-              )) : (
-                <div className="col-span-full text-center py-20 bg-slate-50/50 backdrop-blur-md rounded-3xl border-2 border-dashed border-slate-200">
-                  <p className="text-slate-400 font-bold">No tienes materias registradas para este periodo.</p>
-                </div>
-              )}
+          )) : (
+            <div className="col-span-full text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+              <p className="text-slate-400 font-bold italic">No se encontraron registros académicos.</p>
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 };

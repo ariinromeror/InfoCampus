@@ -1,90 +1,85 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext(null);
-
-// URL Base del Backend - Centralizada para facilitar cambios de servidor
 const API_URL = "http://127.0.0.1:8000/api";
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
+    // 1. Persistencia: Al cargar la app, recuperamos al usuario
     useEffect(() => {
         const storedUser = localStorage.getItem('campus_user');
         if (storedUser) {
-            try {
-                setUser(JSON.parse(storedUser));
-            } catch (err) {
-                localStorage.removeItem('campus_user');
-            }
+            setUser(JSON.parse(storedUser));
         }
         setLoading(false);
     }, []);
 
-    // Función de Login conectada al Backend de Django
     const login = async (username, password) => {
-        setError(null);
         try {
-            const response = await fetch(`${API_URL}/login/`, {
+            // PASO A: Obtener los Tokens (Access & Refresh)
+            const authResponse = await fetch(`${API_URL}/login/`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
             });
 
-            const data = await response.json();
+            const tokens = await authResponse.json();
 
-            if (response.ok) {
-                // El backend debe devolver el objeto usuario con sus flags (rol, en_mora, etc.)
-                const userData = {
-                    ...data.user,
-                    token: data.token, // Si usas Token Auth
-                    loginTime: new Date().getTime()
-                };
-                setUser(userData);
-                localStorage.setItem('campus_user', JSON.stringify(userData));
-                return { success: true };
-            } else {
-                setError(data.error || "Credenciales inválidas");
-                return { success: false, message: data.error };
+            if (!authResponse.ok) {
+                return { success: false, message: tokens.detail || "Error de credenciales" };
             }
+
+            // PASO B: Con el token, pedimos los datos reales del usuario (rol, mora, etc.)
+            const profileResponse = await fetch(`${API_URL}/user/me/`, {
+                headers: {
+                    'Authorization': `Bearer ${tokens.access}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            const userData = await profileResponse.json();
+
+            if (profileResponse.ok) {
+                // Unificamos todo en un solo objeto de sesión
+                const sessionData = {
+                    ...userData,
+                    access: tokens.access,
+                    refresh: tokens.refresh
+                };
+
+                setUser(sessionData);
+                localStorage.setItem('campus_user', JSON.stringify(sessionData));
+                return { success: true };
+            }
+
+            return { success: false, message: "Error al recuperar perfil" };
+
         } catch (err) {
-            setError("Error de conexión con el servidor");
-            return { success: false, message: "No se pudo conectar con el servidor" };
+            return { success: false, message: "Error de conexión con el servidor" };
         }
     };
 
     const logout = () => {
         setUser(null);
-        localStorage.clear();
+        localStorage.removeItem('campus_user');
         window.location.href = '/login';
     };
 
-    // Helpers de estado para UI
+    // Helpers de estado (Derivados del estado actual)
     const isAdmin = user?.rol === 'director' || user?.rol === 'coordinador';
     const isStudent = user?.rol === 'estudiante';
     const isBlocked = user?.en_mora === true;
 
     return (
         <AuthContext.Provider value={{ 
-            user, 
-            login, 
-            logout, 
-            loading, 
-            error,
-            isAdmin, 
-            isStudent, 
-            isBlocked 
+            user, login, logout, loading, 
+            isAdmin, isStudent, isBlocked 
         }}>
             {!loading && children}
         </AuthContext.Provider>
     );
 };
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) throw new Error("useAuth debe usarse dentro de un AuthProvider");
-    return context;
-};
+export const useAuth = () => useContext(AuthContext);

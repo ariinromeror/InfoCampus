@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv # Importación necesaria para el Punto 1.1
+from dotenv import load_dotenv
 
 # 1. CARGA DE BÓVEDA
 load_dotenv()
@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Librerías externas
     'rest_framework',
+    'rest_framework.authtoken',  # OBLIGATORIO: Para generar las llaves de acceso
     'corsheaders', 
     # Tu aplicación
     'portal',
@@ -58,7 +59,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# 5. BASE DE DATOS (Preparada para el Punto 1.2)
+# 5. BASE DE DATOS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -76,9 +77,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# 7. INTERNACIONALIZACIÓN (Configurado para tu región)
+# 7. INTERNACIONALIZACIÓN
 LANGUAGE_CODE = 'es-es'
-TIME_ZONE = 'America/Caracas' # Ajusta esto a tu zona horaria para los Logs de 10 años
+TIME_ZONE = 'America/Caracas'
 USE_I18N = True
 USE_TZ = True
 
@@ -89,17 +90,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# 9. CONFIGURACIÓN DE CORS (Conexión segura con React)
+# 9. CONFIGURACIÓN DE CORS
 CORS_ALLOW_ALL_ORIGINS = True 
 CORS_ALLOW_CREDENTIALS = True
 
-# 10. DJANGO REST FRAMEWORK (Configuración de acceso inicial)
+# 10. DJANGO REST FRAMEWORK (Configuración para Token)
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny', # Cambiaremos a IsAuthenticated en el Punto 1.3
+        'rest_framework.permissions.AllowAny', 
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
 }
+
+APPEND_SLASH = True
