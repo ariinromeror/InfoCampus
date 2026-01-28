@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password) => {
         try {
-            // PASO A: Obtener los Tokens (Access & Refresh)
+            // PASO A: Obtener el Token
             const authResponse = await fetch(`${API_URL}/login/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -28,13 +28,16 @@ export const AuthProvider = ({ children }) => {
             const tokens = await authResponse.json();
 
             if (!authResponse.ok) {
-                return { success: false, message: tokens.detail || "Error de credenciales" };
+                return { 
+                    success: false, 
+                    message: tokens.detail || tokens.error || "Error de credenciales" 
+                };
             }
 
-            // PASO B: Con el token, pedimos los datos reales del usuario (rol, mora, etc.)
+            // ✅ CORRECCIÓN CRÍTICA: Usar 'Token' en lugar de 'Bearer'
             const profileResponse = await fetch(`${API_URL}/user/me/`, {
                 headers: {
-                    'Authorization': `Bearer ${tokens.access}`,
+                    'Authorization': `Token ${tokens.access}`,  // ✅ CAMBIO AQUÍ
                     'Content-Type': 'application/json'
                 },
             });
@@ -54,10 +57,17 @@ export const AuthProvider = ({ children }) => {
                 return { success: true };
             }
 
-            return { success: false, message: "Error al recuperar perfil" };
+            return { 
+                success: false, 
+                message: "Error al recuperar perfil del usuario" 
+            };
 
         } catch (err) {
-            return { success: false, message: "Error de conexión con el servidor" };
+            console.error("Error en login:", err);
+            return { 
+                success: false, 
+                message: "Error de conexión con el servidor" 
+            };
         }
     };
 
@@ -74,8 +84,13 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ 
-            user, login, logout, loading, 
-            isAdmin, isStudent, isBlocked 
+            user, 
+            login, 
+            logout, 
+            loading, 
+            isAdmin, 
+            isStudent, 
+            isBlocked 
         }}>
             {!loading && children}
         </AuthContext.Provider>

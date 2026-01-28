@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from .models import Usuario, Carrera, Materia, CargaAcademica
 from .serializers import UsuarioSerializer, MateriaSerializer, CargaAcademicaSerializer
 
-# --- LOGIN OPTIMIZADO ---
+# --- LOGIN CORREGIDO ---
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_view(request):
@@ -18,16 +18,25 @@ def login_view(request):
     user = authenticate(username=username, password=password)
     
     if user:
+        # Verificar que el usuario esté activo
+        if not user.is_active:
+            return Response({
+                'error': 'Usuario inactivo. Contacta a administración.'
+            }, status=status.HTTP_403_FORBIDDEN)
+        
         token, _ = Token.objects.get_or_create(user=user)
-        # USAMOS EL SERIALIZER AQUÍ PARA MANDAR TODOS LOS DATOS (CARRERA, ROL, ETC)
         user_data = UsuarioSerializer(user).data
         
+        # ✅ CORRECCIÓN: Devolver 'access' en lugar de 'token'
         return Response({
-            'token': token.key,
+            'access': token.key,  # Frontend espera 'access'
+            'refresh': token.key, # Por compatibilidad (aunque no uses JWT)
             'user': user_data
         }, status=status.HTTP_200_OK)
     
-    return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
+    return Response({
+        'detail': 'Credenciales inválidas'  # Frontend busca 'detail'
+    }, status=status.HTTP_401_UNAUTHORIZED)
 
 # --- VISTA DE PERFIL ---
 @api_view(['GET'])
@@ -35,10 +44,11 @@ def login_view(request):
 def perfil_usuario(request):
     try:
         serializer = UsuarioSerializer(request.user)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
-        # Esto nos ayudará a ver errores en consola si ocurren
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({
+            "error": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # --- VISTA DE MATERIAS ---
 class MateriaViewSet(viewsets.ReadOnlyModelViewSet):
@@ -50,7 +60,6 @@ class MateriaViewSet(viewsets.ReadOnlyModelViewSet):
         if user.rol == 'estudiante':
             if user.en_mora:
                 return Materia.objects.none()
-            # Si el usuario no tiene carrera, no devolvemos nada para evitar error
             if not user.carrera:
                 return Materia.objects.none()
             return Materia.objects.filter(carrera=user.carrera)

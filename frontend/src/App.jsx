@@ -5,14 +5,16 @@ import Dashboard from "./Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./layouts/MainLayout.jsx";
 
+import MisNotas from "./views/MisNotas";
+import Horarios from "./views/Horarios";
+import EstadoCuenta from "./views/EstadoCuenta"; 
+
 function App() {
   return (
     <Router>
       <Routes>
-        {/* 1. RUTA PÚBLICA: El Login no lleva Sidebar */}
         <Route path="/login" element={<Login />} />
 
-        {/* 2. RUTAS PROTEGIDAS: Todas envueltas en el MainLayout */}
         <Route
           path="/"
           element={
@@ -21,18 +23,14 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Todas estas rutas aparecerán dentro del <Outlet /> del MainLayout */}
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="notas" element={<MisNotas />} />
+          <Route path="horarios" element={<Horarios />} />
+          <Route path="estado-cuenta" element={<EstadoCuenta />} /> 
           
-          {/* Aquí es donde agregaremos más adelante: 
-              <Route path="notas" element={<Notas />} /> 
-          */}
-          
-          {/* Redirección interna: si entras a "/" te manda a "/dashboard" */}
           <Route index element={<Navigate to="/dashboard" replace />} />
         </Route>
 
-        {/* 3. REDIRECCIÓN GLOBAL: Si la ruta no existe, al dashboard */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Router>

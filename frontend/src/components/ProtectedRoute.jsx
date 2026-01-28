@@ -2,24 +2,24 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-    const { user, loading, isBlocked } = useAuth();
+    const { user, loading } = useAuth();
 
-    if (loading) return null; // O un spinner global
+    
+    if (loading) return null; 
 
+    
     if (!user) {
-        return <Navigate to="/login" />;
+        return <Navigate to="/login" replace />;
     }
 
-    // Bloqueo por Mora (Fase 2.2)
-    if (isBlocked && user.rol === 'estudiante') {
-        return <Navigate to="/bloqueado" />;
-    }
+    
 
-    // Bloqueo por Rol (Fase 1.3)
+    
     if (allowedRoles && !allowedRoles.includes(user.rol)) {
-        return <Navigate to="/dashboard" />;
+        return <Navigate to="/dashboard" replace />;
     }
 
+    
     return children;
 };
 
