@@ -1,6 +1,0 @@
-username,email,rol,dni,en_mora,es_becado,beca,carrera
-admin_gral,admin@infocampus.com,director,101010,False,False,0,Ingenieria Sistemas
-profe_carlos,carlos@infocampus.com,profesor,404040,False,False,0,Ingenieria Sistemas
-ana_elite,ana@estudiante.com,estudiante,111111,False,True,100,Ingenieria Sistemas
-pedro_mora,pedro@estudiante.com,estudiante,222222,True,False,0,Derecho
-luis_regular,luis@estudiante.com,estudiante,333333,False,False,0,Medicina
