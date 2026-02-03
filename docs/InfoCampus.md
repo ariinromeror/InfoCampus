@@ -6,7 +6,7 @@
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
 
-> Sistema ERP completo desarrollado en 7 días mediante metodología AI-Driven para la gestión integral de instituciones universitarias con control de acceso basado en roles (RBAC).
+> Sistema ERP completo desarrollado mediante metodología AI-Driven para la gestión integral de instituciones universitarias con control de acceso basado en roles (RBAC).
 
 **Desarrollado por:** Arin Romero  
 **Rol:** Arquitecto de Prompts | Product Owner | Director de Proyecto  
@@ -39,7 +39,7 @@
 
 ### 🏆 Logro Principal
 
-Desarrollo completo de un ERP funcional en **7 días** mediante una metodología de desarrollo AI-Driven que combina:
+Desarrollo completo de un ERP funcional mediante una metodología de desarrollo AI-Driven que combina:
 - Arquitectura de prompts estratégicos
 - Supervisión técnica continua
 - Orquestación inteligente de sistemas
@@ -630,19 +630,6 @@ Response:
 }
 ```
 
----
-
-## 📈 Métricas del Proyecto
-
-### Tiempo de Desarrollo
-
-| Fase | Duración |
-|------|----------|
-| Diseño de arquitectura y modelos | 1 día |
-| Desarrollo del backend (Django) | 2 días |
-| Desarrollo del frontend (React) | 2 días |
-| Scripts de población y testing | 2 días |
-| **Total** | **7 días** |
 
 ### Volumen de Datos Generados
 
