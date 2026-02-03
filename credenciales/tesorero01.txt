@@ -1,0 +1,12 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   tesorero01
+Contraseña: campus2026
+Rol:       Tesorero
+Email:     tesorero01@infocampus.edu
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

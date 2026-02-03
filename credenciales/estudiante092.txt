@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante092
+Contraseña: campus2026
+Rol:       Estudiante
+Email:     estudiante092@infocampus.edu
+Carrera:   Ingeniería en Sistemas Computacionales (ISC)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

@@ -1,0 +1,12 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   coordinador02
+Contraseña: campus2026
+Rol:       Coordinador
+Email:     coordinador02@infocampus.edu
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

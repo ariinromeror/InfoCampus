@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante037
+Contraseña: campus2026
+Rol:       Estudiante
+Email:     estudiante037@infocampus.edu
+Carrera:   Licenciatura en Derecho (DER)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

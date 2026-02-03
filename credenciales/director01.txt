@@ -1,0 +1,12 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   director01
+Contraseña: campus2026
+Rol:       Director
+Email:     director01@infocampus.edu
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

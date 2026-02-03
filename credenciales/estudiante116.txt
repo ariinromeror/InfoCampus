@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante116
+Contraseña: campus2026
+Rol:       Estudiante - Beca 25%
+Email:     estudiante116@infocampus.edu
+Carrera:   Administración de Empresas (ADM)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

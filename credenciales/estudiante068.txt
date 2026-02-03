@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante068
+Contraseña: campus2026
+Rol:       Estudiante
+Email:     estudiante068@infocampus.edu
+Carrera:   Administración de Empresas (ADM)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

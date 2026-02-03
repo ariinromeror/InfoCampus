@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante057
+Contraseña: campus2026
+Rol:       Estudiante
+Email:     estudiante057@infocampus.edu
+Carrera:   Psicología Clínica (PSI)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

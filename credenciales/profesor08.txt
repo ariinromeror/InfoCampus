@@ -1,0 +1,12 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   profesor08
+Contraseña: campus2026
+Rol:       Profesor (3 secciones)
+Email:     profesor08@infocampus.edu
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

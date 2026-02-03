@@ -1,159 +1,117 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
     LogOut, BookOpen, LayoutDashboard, 
-    GraduationCap, ClipboardList, Wallet, AlertCircle,
-    ChevronRight, Loader2
+    GraduationCap, ClipboardList, Wallet, 
+    ChevronRight, Users, Landmark, BarChart3
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { academicoService } from '../services/academicoService';
+import { motion } from 'framer-motion';
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const [secciones, setSecciones] = useState([]);
-    const [loading, setLoading] = useState(false);
 
-    // FASE 2.1: Carga dinámica de secciones para el Profesor
-    useEffect(() => {
-        if (user?.rol === 'profesor') {
-            cargarDatosProfesor();
-        }
-    }, [user]);
-
-    const cargarDatosProfesor = async () => {
-        try {
-            setLoading(true);
-            const response = await academicoService.getStatsProfesor();
-            setSecciones(response.data.mis_clases || []);
-        } catch (err) {
-            console.error("Error al cargar secciones en sidebar:", err);
-        } finally {
-            setLoading(false);
-        }
+    const menuConfig = {
+        estudiante: [
+            { name: 'Inicio', path: '/dashboard', icon: LayoutDashboard },
+            { name: 'Mis Notas', path: '/notas', icon: GraduationCap },
+            { name: 'Horarios', path: '/horarios', icon: BookOpen },
+            { name: 'Estado de Cuenta', path: '/estado-cuenta', icon: Wallet },
+        ],
+        profesor: [
+            { name: 'Panel Control', path: '/dashboard', icon: LayoutDashboard },
+            { name: 'Mis Secciones', path: '/secciones', icon: ClipboardList },
+        ],
+        tesorero: [
+            { name: 'Caja Principal', path: '/dashboard', icon: Landmark },
+            { name: 'Validar Pagos', path: '/validar-pagos', icon: Wallet },
+            { name: 'Lista de Mora', path: '/lista-mora', icon: Users },
+        ],
+        director: [
+            { name: 'Global Insight', path: '/dashboard', icon: BarChart3 },
+        ],
+        coordinador: [
+            { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+            { name: 'Secciones', path: '/secciones', icon: ClipboardList },
+        ],
+        administrativo: [
+            { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+        ]
     };
 
-    const handleNavigation = (path, restricted = false) => {
-        if (restricted && user?.en_mora) {
-            navigate('/estado-cuenta');
-            return;
-        }
-        navigate(path);
-    };
-
-    const NavItem = ({ path, icon: Icon, label, restricted, badge = null }) => {
-        const isActive = location.pathname === path;
-        return (
-            <button
-                onClick={() => handleNavigation(path, restricted)}
-                className={`
-                    w-full flex items-center px-4 py-3.5 mb-1 text-xs font-bold rounded-xl transition-all group relative
-                    ${isActive 
-                        ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/20' 
-                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                    }
-                `}
-            >
-                <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-white'}`} />
-                <span className="tracking-wide uppercase flex-1 text-left">{label}</span>
-                
-                {badge}
-                
-                {restricted && user?.en_mora && (
-                    <AlertCircle className="absolute right-4 h-4 w-4 text-amber-500 animate-pulse" />
-                )}
-            </button>
-        );
-    };
+    const menuItems = menuConfig[user?.rol] || [];
 
     return (
-        <aside className="w-72 bg-slate-900 border-r border-slate-800 hidden md:flex flex-col shadow-2xl z-20">
-            {/* LOGO INSTITUCIONAL */}
-            <div className="h-24 flex flex-col justify-center px-8 border-b border-slate-800 bg-slate-950">
+        <aside className="hidden lg:flex flex-col w-72 bg-slate-900 border-r border-slate-800 shadow-2xl z-50">
+            <div className="p-8 mb-4">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-indigo-600 rounded-lg">
-                        <BookOpen className="h-5 w-5 text-white" />
+                    <div className="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20 rotate-3 group-hover:rotate-0 transition-transform">
+                        <GraduationCap className="text-white" size={24} />
                     </div>
                     <div>
-                        <span className="font-black text-white text-lg tracking-tighter italic block leading-none">
-                            INFO CAMPUS
-                        </span>
-                        <span className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">
-                            Portal Académico
-                        </span>
+                        <h1 className="text-xl font-black text-white uppercase tracking-tighter italic leading-none">
+                            Campus<span className="text-indigo-500">Elite</span>
+                        </h1>
+                        <p className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-1">Management System</p>
                     </div>
                 </div>
             </div>
 
-            {/* MENÚ DINÁMICO POR ROL */}
-            <nav className="flex-1 px-4 py-8 space-y-1 overflow-y-auto custom-scrollbar">
-                <p className="px-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4">General</p>
-                <NavItem path="/dashboard" icon={LayoutDashboard} label="Dashboard" />
+            <nav className="flex-1 px-4 space-y-2 overflow-y-auto custom-scrollbar">
+                <p className="px-4 text-[10px] font-black text-slate-600 uppercase tracking-widest mb-4">Menú Principal</p>
+                
+                {menuItems.map((item) => {
+                    const isActive = location.pathname === item.path;
+                    const Icon = item.icon;
 
-                {/* VISTA ESTUDIANTE */}
-                {user?.rol === 'estudiante' && (
-                    <>
-                        <div className="my-6 border-t border-slate-800 mx-4"></div>
-                        <p className="px-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4">Académico</p>
-                        <NavItem path="/notas" icon={GraduationCap} label="Mis Calificaciones" restricted />
-                        <NavItem path="/horarios" icon={ClipboardList} label="Horario de Clases" restricted />
-                        
-                        <div className="my-6 border-t border-slate-800 mx-4"></div>
-                        <p className="px-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4">Financiero</p>
-                        <NavItem 
-                            path="/estado-cuenta" 
-                            icon={Wallet} 
-                            label="Tesorería y Pagos" 
-                            badge={user?.en_mora && <span className="w-2 h-2 bg-red-500 rounded-full ml-2" />}
-                        />
-                    </>
-                )}
-
-                {/* VISTA PROFESOR: SECCIONES REALES */}
-                {user?.rol === 'profesor' && (
-                    <>
-                        <div className="my-6 border-t border-slate-800 mx-4"></div>
-                        <p className="px-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4 flex justify-between items-center">
-                            Mis Secciones
-                            {loading && <Loader2 className="animate-spin h-3 w-3" />}
-                        </p>
-                        {secciones.map((clase) => (
-                            <button
-                                key={clase.id}
-                                onClick={() => navigate(`/seccion/${clase.id}`)}
-                                className="w-full flex flex-col px-4 py-3 mb-2 rounded-xl border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800/50 transition-all text-left group"
-                            >
-                                <span className="text-[10px] font-black text-indigo-400 uppercase truncate">
-                                    {clase.materia}
-                                </span>
-                                <div className="flex justify-between items-center mt-1">
-                                    <span className="text-[9px] text-slate-500 font-bold uppercase">{clase.codigo}</span>
-                                    <ChevronRight className="h-3 w-3 text-slate-700 group-hover:text-indigo-400 transition-colors" />
+                    return (
+                        <button
+                            key={item.name}
+                            onClick={() => navigate(item.path)}
+                            className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all duration-300 group ${
+                                isActive 
+                                ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/20 translate-x-1' 
+                                : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                            }`}
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className={`p-2 rounded-xl transition-colors ${isActive ? 'bg-white/20' : 'bg-slate-800 group-hover:bg-slate-700'}`}>
+                                    <Icon size={18} strokeWidth={isActive ? 3 : 2} />
                                 </div>
-                            </button>
-                        ))}
-                    </>
-                )}
+                                <span className={`text-[11px] font-black uppercase tracking-tight ${isActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>
+                                    {item.name}
+                                </span>
+                            </div>
+                            {isActive && (
+                                <motion.div layoutId="activeDot" className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
+                            )}
+                            {!isActive && (
+                                <ChevronRight size={14} className="opacity-0 group-hover:opacity-40 -translate-x-2 group-hover:translate-x-0 transition-all" />
+                            )}
+                        </button>
+                    );
+                })}
             </nav>
 
-            {/* FOOTER - PERFIL Y CIERRE */}
-            <div className="p-4 border-t border-slate-800 bg-slate-950/50">
-                <div className="flex items-center gap-3 px-2 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-black text-indigo-400 border border-slate-700 uppercase">
+            <div className="p-6 bg-slate-950/40 border-t border-slate-800">
+                <div className="flex items-center gap-3 mb-6 px-2">
+                    <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 font-black text-xs uppercase shadow-inner">
                         {user?.username?.substring(0, 2)}
                     </div>
                     <div className="flex-1 overflow-hidden">
                         <p className="text-[10px] font-black text-white truncate uppercase italic">{user?.username}</p>
-                        <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">{user?.rol}</p>
+                        <p className="text-[8px] font-bold text-indigo-500 uppercase tracking-widest">{user?.rol}</p>
                     </div>
                 </div>
+
                 <button 
-                    onClick={logout} 
-                    className="w-full flex items-center justify-center py-3 px-4 rounded-xl border border-slate-800 text-slate-400 font-bold hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all text-xs group"
+                    onClick={logout}
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border border-slate-800 text-slate-500 font-black text-[10px] uppercase hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all duration-300 group"
                 >
-                    <LogOut className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" /> 
-                    CERRAR SESIÓN
+                    <LogOut size={16} className="group-hover:-translate-x-1 transition-transform" />
+                    Cerrar Sesión
                 </button>
             </div>
         </aside>

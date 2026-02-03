@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante078
+Contraseña: campus2026
+Rol:       Estudiante
+Email:     estudiante078@infocampus.edu
+Carrera:   Medicina General (MED)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

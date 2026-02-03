@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante093
+Contraseña: campus2026
+Rol:       Estudiante
+Email:     estudiante093@infocampus.edu
+Carrera:   Licenciatura en Derecho (DER)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

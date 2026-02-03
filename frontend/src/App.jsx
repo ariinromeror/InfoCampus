@@ -5,23 +5,33 @@ import Login from "./pages/auth/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./layout/MainLayout";
 
-// Dashboards por rol 
+// Dashboards por rol
 import EstudianteDashboard from "./pages/dashboards/EstudianteDashboard";
 import ProfesorDashboard from "./pages/dashboards/ProfesorDashboard";
 import TesoreroDashboard from "./pages/dashboards/TesoreroDashboard";
 import DirectorDashboard from "./pages/dashboards/DirectorDashboard";
 import CoordinadorDashboard from "./pages/dashboards/CoordinadorDashboard";
 
-// Vistas específicas
-import MisNotas from "./views/MisNotas";
-import Horarios from "./views/Horarios";
-import EstadoCuenta from "./views/EstadoCuenta";
+// Vistas del Profesor
+import ProfesorSecciones from "./pages/dashboards/ProfesorSecciones";
+import GestionNotas from "./pages/dashboards/GestionNotas";
 
-// Componente para redirigir según el rol
+// Vistas del Tesorero
+import ValidarPagos from "./pages/dashboards/ValidarPagos";
+import ListaMora from "./pages/dashboards/ListaMora";
+
+// Vistas específicas del estudiante (ahora desde pages/dashboards)
+import MisNotas from "./pages/dashboards/MisNotas";
+import Horarios from "./pages/dashboards/Horarios";
+import EstadoCuenta from "./pages/dashboards/EstadoCuenta";
+
+// Vistas adicionales
+import EstudianteDetalle from "./pages/estudiante/EstudianteDetalle";
+import MallaCurricular from "./pages/admin/MallaCurricular";
+
 const DashboardRouter = () => {
   const { user } = useAuth();
 
-  // Redirige al dashboard correspondiente según el rol
   switch (user?.rol) {
     case 'estudiante':
       return <EstudianteDashboard />;
@@ -44,10 +54,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Ruta pública */}
         <Route path="/login" element={<Login />} />
 
-        {/* Rutas protegidas */}
         <Route
           path="/"
           element={
@@ -56,19 +64,24 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Dashboard dinámico según rol */}
           <Route path="dashboard" element={<DashboardRouter />} />
 
-          {/* Rutas específicas */}
+          <Route path="secciones" element={<ProfesorSecciones />} />
+          <Route path="gestion-notas/:seccionId" element={<GestionNotas />} />
+
+          <Route path="validar-pagos" element={<ValidarPagos />} />
+          <Route path="lista-mora" element={<ListaMora />} />
+
           <Route path="notas" element={<MisNotas />} />
           <Route path="horarios" element={<Horarios />} />
           <Route path="estado-cuenta" element={<EstadoCuenta />} />
 
-          {/* Redirige / a dashboard */}
+          <Route path="estudiante/:id" element={<EstudianteDetalle />} />
+          <Route path="malla-curricular" element={<MallaCurricular />} />
+
           <Route index element={<Navigate to="/dashboard" replace />} />
         </Route>
 
-        {/* Ruta catch-all */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Router>

@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante052
+Contraseña: campus2026
+Rol:       Estudiante - Beca 100%
+Email:     estudiante052@infocampus.edu
+Carrera:   Licenciatura en Derecho (DER)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================

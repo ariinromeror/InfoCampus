@@ -1,246 +1,195 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { academicoService } from '../../services/academicoService';
 import { 
-  DollarSign, 
-  TrendingUp, 
-  AlertTriangle,
-  Users,
-  CheckCircle,
-  Loader2
+  DollarSign, TrendingUp, AlertCircle, Users, 
+  ShieldCheck, Loader2, ArrowUpRight, Wallet, 
+  BarChart3, Activity
 } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import StatCard from '../../components/cards/StatCard.jsx';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const TesoreroDashboard = () => {
-  const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    ingresoProyectado: 0,
-    ingresoReal: 0,
-    tasaCobranza: 0,
-    estudiantesEnMora: 0
+  const [data, setData] = useState({
+    ingreso_proyectado: 0,
+    ingreso_real: 0,
+    tasa_cobranza: 0,
+    listado_cobranza: []
   });
 
-  const API_URL = "http://127.0.0.1:8000/api/";
+  // --- FORMATEADOR DE MONEDA ---
+  const formatCurrency = (val) => {
+    const num = typeof val === 'string' ? parseFloat(val) : val;
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2
+    }).format(num || 0);
+  };
 
   useEffect(() => {
-    fetchDatos();
-  }, [user]);
+    fetchFinanzas();
+  }, []);
 
-  const fetchDatos = async () => {
+  const fetchFinanzas = async () => {
     try {
-      // Aquí conectarías con tu endpoint de tesorería
-      // Por ahora, datos de ejemplo
-      setStats({
-        ingresoProyectado: 125000,
-        ingresoReal: 98500,
-        tasaCobranza: 78.8,
-        estudiantesEnMora: 12
+      const res = await academicoService.getStatsFinanzas();
+      // Sincronización con las llaves exactas de views.py
+      setData({
+        ingreso_proyectado: res.data.ingreso_proyectado || 0,
+        ingreso_real: res.data.ingreso_real || 0,
+        tasa_cobranza: res.data.tasa_cobranza || 0,
+        listado_cobranza: res.data.listado_cobranza || []
       });
-
-      setLoading(false);
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Error al cargar finanzas:", err);
+      // ✅ NUEVO: Mostrar mensaje de error más descriptivo
+      if (err.response) {
+        console.error("Detalles del error:", err.response.data);
+      }
+    } finally {
       setLoading(false);
     }
   };
 
-  // Datos para gráfico de pastel
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-screen">
+      <Loader2 className="animate-spin text-emerald-500" size={48} />
+    </div>
+  );
+
+  // Datos para el gráfico de Pie basado en la realidad
   const pieData = [
-    { name: 'Pagado', value: stats.ingresoReal, color: '#10b981' },
-    { name: 'Pendiente', value: stats.ingresoProyectado - stats.ingresoReal, color: '#ef4444' }
+    { name: 'Recaudado', value: parseFloat(data.ingreso_real) || 0, color: '#10b981' },
+    { 
+      name: 'Pendiente', 
+      value: Math.max(0, parseFloat(data.ingreso_proyectado || 0) - parseFloat(data.ingreso_real || 0)), 
+      color: '#f43f5e' 
+    }
   ];
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
-        <Loader2 className="animate-spin text-red-600" size={48} />
-        <p className="text-slate-400 font-bold">Cargando panel de tesorería...</p>
-      </div>
-    );
-  }
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="space-y-8"
-    >
-      {/* BIENVENIDA */}
-      <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-8 rounded-3xl shadow-lg text-white">
-        <h1 className="text-3xl font-black mb-2">
-          Panel de Tesorería
-        </h1>
-        <p className="text-green-100">
-          Gestión financiera y cobranza del período actual
-        </p>
-      </div>
-
-      {/* ESTADÍSTICAS FINANCIERAS */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <StatCard
-          title="Ingreso Proyectado"
-          value={`$${stats.ingresoProyectado.toLocaleString()}`}
-          icon={DollarSign}
-          color="blue"
-          subtitle="Total período"
-        />
-
-        <StatCard
-          title="Ingreso Real"
-          value={`$${stats.ingresoReal.toLocaleString()}`}
-          icon={CheckCircle}
-          color="green"
-          subtitle="Cobrado a la fecha"
-        />
-
-        <StatCard
-          title="Tasa de Cobranza"
-          value={`${stats.tasaCobranza}%`}
-          icon={TrendingUp}
-          color="purple"
-          subtitle="Meta: 85%"
-        />
-
-        <StatCard
-          title="Estudiantes en Mora"
-          value={stats.estudiantesEnMora}
-          icon={AlertTriangle}
-          color="red"
-          subtitle="Requieren atención"
-        />
-      </div>
-
-      {/* GRÁFICO DE COBRANZA */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100"
-        >
-          <h3 className="text-xl font-black text-slate-800 mb-6">
-            📊 Estado de Cobranza
-          </h3>
-          
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
-            </PieChart>
-          </ResponsiveContainer>
-
-          <div className="grid grid-cols-2 gap-4 mt-6">
-            <div className="text-center">
-              <p className="text-2xl font-black text-green-600">
-                ${stats.ingresoReal.toLocaleString()}
-              </p>
-              <p className="text-xs font-bold text-slate-500 uppercase">Cobrado</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-black text-red-600">
-                ${(stats.ingresoProyectado - stats.ingresoReal).toLocaleString()}
-              </p>
-              <p className="text-xs font-bold text-slate-500 uppercase">Por Cobrar</p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* LISTA DE MOROSOS */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100"
-        >
-          <h3 className="text-xl font-black text-slate-800 mb-6">
-            ⚠️ Estudiantes en Mora
-          </h3>
-
-          <div className="space-y-3">
-            {[
-              { nombre: 'Juan Pérez', deuda: 450, dias: 15 },
-              { nombre: 'María García', deuda: 780, dias: 8 },
-              { nombre: 'Carlos Ruiz', deuda: 320, dias: 22 },
-              { nombre: 'Ana López', deuda: 890, dias: 5 }
-            ].map((estudiante, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-100"
-              >
-                <div>
-                  <p className="font-bold text-slate-800 text-sm">
-                    {estudiante.nombre}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    {estudiante.dias} días de mora
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="font-black text-red-600">
-                    ${estudiante.deuda}
-                  </p>
-                  <button className="text-xs font-bold text-blue-600 hover:text-blue-700">
-                    Ver detalles
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <button className="w-full mt-4 bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-700 transition-all">
-            Ver Lista Completa
-          </button>
-        </motion.div>
-      </div>
-
-      {/* ACCIONES RÁPIDAS */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-      >
-        <h3 className="text-xl font-black text-slate-800 mb-6">
-          ⚡ Acciones Rápidas
-        </h3>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <button className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all text-center group">
-            <CheckCircle className="mx-auto mb-3 group-hover:scale-110 transition-transform" size={32} />
-            <p className="font-bold">Validar Pagos</p>
-          </button>
-
-          <button className="bg-gradient-to-br from-green-600 to-green-700 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all text-center group">
-            <DollarSign className="mx-auto mb-3 group-hover:scale-110 transition-transform" size={32} />
-            <p className="font-bold">Generar Reporte</p>
-          </button>
-
-          <button className="bg-gradient-to-br from-purple-600 to-purple-700 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all text-center group">
-            <Users className="mx-auto mb-3 group-hover:scale-110 transition-transform" size={32} />
-            <p className="font-bold">Lista Morosos</p>
-          </button>
-
-          <button className="bg-gradient-to-br from-orange-600 to-orange-700 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all text-center group">
-            <AlertTriangle className="mx-auto mb-3 group-hover:scale-110 transition-transform" size={32} />
-            <p className="font-bold">Enviar Recordatorios</p>
+    <div className="p-8 max-w-7xl mx-auto space-y-8">
+      {/* HEADER */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tighter italic uppercase">
+            Control de Tesorería
+          </h1>
+          <p className="text-slate-500 font-bold">Resumen financiero institucional</p>
+        </div>
+        <div className="flex gap-3">
+          <button 
+            onClick={() => navigate('/validar-pagos')}
+            className="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-100 flex items-center gap-2"
+          >
+            <ShieldCheck size={18} /> Validar Pagos
           </button>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+
+      {/* METRICAS PRINCIPALES */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+          <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-6">
+            <Wallet size={24} />
+          </div>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Ingreso Proyectado</p>
+          <h2 className="text-3xl font-black text-slate-900">{formatCurrency(data.ingreso_proyectado)}</h2>
+        </div>
+
+        <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+          <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 mb-6">
+            <TrendingUp size={24} />
+          </div>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Recaudación Real</p>
+          <h2 className="text-3xl font-black text-emerald-600">{formatCurrency(data.ingreso_real)}</h2>
+        </div>
+
+        <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+          <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-600 mb-6">
+            <Activity size={24} />
+          </div>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tasa de Cobranza</p>
+          <h2 className="text-3xl font-black text-slate-900">{data.tasa_cobranza.toFixed(1)}%</h2>
+        </div>
+      </div>
+
+      {/* GRÁFICO Y ACCIONES */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* ✅ CORREGIDO: Contenedor con altura fija para evitar el error de dimensiones */}
+        <div className="bg-slate-900 rounded-[50px] p-10 text-white shadow-2xl" style={{ minHeight: '400px' }}>
+          <h3 className="text-xl font-black uppercase italic tracking-tighter mb-8 text-center">Estado de Cartera</h3>
+          {/* ✅ CORREGIDO: Contenedor con dimensiones explícitas */}
+          <div style={{ width: '100%', height: '250px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie 
+                  data={pieData} 
+                  innerRadius={70} 
+                  outerRadius={95} 
+                  paddingAngle={8} 
+                  dataKey="value"
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#0f172a', 
+                    borderRadius: '15px', 
+                    border: '1px solid rgba(255,255,255,0.1)', 
+                    color: '#fff' 
+                  }}
+                  formatter={(value) => formatCurrency(value)}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex justify-center gap-8 mt-6">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+              <span className="text-xs font-bold opacity-70">Cobrado</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-rose-500"></div>
+              <span className="text-xs font-bold opacity-70">Pendiente</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
+          <button 
+            onClick={() => navigate('/lista-mora')}
+            className="group bg-white p-8 rounded-[40px] border border-slate-100 hover:border-rose-200 transition-all flex items-center justify-between"
+          >
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 bg-rose-50 rounded-[24px] flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform">
+                <AlertCircle size={32} />
+              </div>
+              <div>
+                <h4 className="text-xl font-black text-slate-900 uppercase italic">Lista de Mora</h4>
+                <p className="text-slate-500 font-medium text-sm">Ver alumnos con saldos pendientes</p>
+              </div>
+            </div>
+            <ArrowUpRight className="text-slate-300" />
+          </button>
+
+          <div className="bg-indigo-600 p-8 rounded-[40px] text-white flex items-center gap-6">
+            <div className="w-16 h-16 bg-white/10 rounded-[24px] flex items-center justify-center">
+              <BarChart3 size={32} />
+            </div>
+            <div>
+              <h4 className="text-xl font-black uppercase italic tracking-tighter">Reporte Proyectado</h4>
+              <p className="text-indigo-100 text-sm">Basado en inscripciones activas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

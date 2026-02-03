@@ -1,0 +1,13 @@
+==================================================
+CREDENCIALES DE ACCESO - INFO CAMPUS
+==================================================
+
+Usuario:   estudiante028
+Contraseña: campus2026
+Rol:       Estudiante - Beca 50%
+Email:     estudiante028@infocampus.edu
+Carrera:   Ingeniería en Sistemas Computacionales (ISC)
+
+==================================================
+IMPORTANTE: Cambia tu contraseña al primer ingreso
+==================================================
