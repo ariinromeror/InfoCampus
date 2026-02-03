@@ -1,4 +1,4 @@
-# InfoCampus - Sistema ERP para Gestión Universitaria
+# InfoCampus - University Management ERP System
 
 ![Django](https://img.shields.io/badge/Django-6.0.1-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)
@@ -6,117 +6,119 @@
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
 
-> Sistema ERP completo desarrollado mediante metodología AI-Driven para la gestión integral de instituciones universitarias con control de acceso basado en roles (RBAC).
+> A comprehensive ERP system for university management with Role-Based Access Control (RBAC), financial module with intelligent debt management, and academic tracking capabilities.
 
-**Desarrollado por:** Arin Romero  
-**Rol:** Arquitecto de Prompts | Product Owner | Director de Proyecto  
-**Fecha:** Febrero 2026
+**Developed by:** Arin Romero  
+**Role:** Prompt Architect | Product Owner | Project Director  
+**Date:** February 2026
 
 ---
 
-## 📋 Tabla de Contenidos
+## 📋 Table of Contents
 
-- [Resumen Ejecutivo](#-resumen-ejecutivo)
-- [Demo y Características](#-demo-y-características)
-- [Arquitectura del Sistema](#-arquitectura-del-sistema)
-- [Stack Tecnológico](#-stack-tecnológico)
-- [Instalación y Configuración](#-instalación-y-configuración)
-- [Módulos Funcionales](#-módulos-funcionales)
-- [Sistema RBAC](#-sistema-rbac-control-de-acceso-basado-en-roles)
-- [Lógica de Negocio](#-lógica-de-negocio)
-- [Scripts de Población](#-scripts-de-población-de-datos)
-- [API Endpoints](#-api-endpoints)
-- [Métricas del Proyecto](#-métricas-del-proyecto)
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [System Architecture](#-system-architecture)
+- [Tech Stack](#-tech-stack)
+- [Installation & Setup](#-installation--setup)
+- [Functional Modules](#-functional-modules)
+- [RBAC System](#-rbac-system-role-based-access-control)
+- [Business Logic](#-business-logic)
+- [Data Population Scripts](#-data-population-scripts)
+- [API Documentation](#-api-documentation)
+- [Project Metrics](#-project-metrics)
 - [Roadmap](#-roadmap)
-- [Contribución](#-contribución)
-- [Licencia](#-licencia)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
-## 🎯 Resumen Ejecutivo
+## 🎯 Overview
 
-**InfoCampus** es un ERP (Enterprise Resource Planning) full-stack diseñado para la gestión integral de instituciones universitarias. Implementa un robusto sistema de **Control de Acceso Basado en Roles (RBAC)** con cinco roles operacionales diferenciados.
+**InfoCampus** is a full-stack ERP (Enterprise Resource Planning) system designed for comprehensive university management. It implements a robust **Role-Based Access Control (RBAC)** system with five differentiated operational roles.
 
-### 🏆 Logro Principal
+### Project Goals
 
-Desarrollo completo de un ERP funcional mediante una metodología de desarrollo AI-Driven que combina:
-- Arquitectura de prompts estratégicos
-- Supervisión técnica continua
-- Orquestación inteligente de sistemas
+This project was developed as a **professional portfolio piece** to demonstrate:
+- Full-stack development capabilities
+- Complex business logic implementation
+- Scalable architecture design
+- Technical project management skills
 
-### 🎯 Objetivo del Proyecto
+### Key Achievements
 
-Este proyecto fue desarrollado como **portafolio profesional** para demostrar:
-- Capacidad de desarrollo full-stack
-- Implementación de lógica de negocio compleja
-- Diseño de arquitectura escalable
-- Gestión de proyectos técnicos
+- ✅ Complete ERP system with 5 operational modules
+- ✅ Sophisticated financial logic with automatic debt calculation
+- ✅ Real-world data simulation (20% delinquency, 20% failures, 20% scholarships)
+- ✅ Comprehensive audit trail system
+- ✅ RESTful API with JWT authentication
+- ✅ Responsive modern UI with role-specific dashboards
 
 ---
 
-## ✨ Demo y Características
+## ✨ Key Features
 
-### Características Principales
+### Core Functionality
 
-- ✅ **Sistema RBAC completo** con 5 roles operacionales
-- ✅ **Autenticación JWT** con tokens de acceso y refresh
-- ✅ **API RESTful** totalmente documentada
-- ✅ **Bloqueo inteligente** por morosidad financiera
-- ✅ **Auditoría completa** de cambios en calificaciones
-- ✅ **Dashboard analítico** personalizado por rol
-- ✅ **Sistema de becas** con cálculo automático de descuentos
-- ✅ **Responsive design** adaptable a todos los dispositivos
-- ✅ **Población automática** de datos realistas
+- ✅ **Complete RBAC system** with 5 operational roles
+- ✅ **JWT authentication** with access and refresh tokens
+- ✅ **Fully documented RESTful API**
+- ✅ **Intelligent financial blocking** based on payment delinquency
+- ✅ **Complete audit trail** for grade modifications
+- ✅ **Role-specific analytical dashboards**
+- ✅ **Scholarship system** with automatic discount calculation
+- ✅ **Responsive design** adaptable to all devices
+- ✅ **Automated realistic data population**
 
-### Usuarios de Prueba
+### Demo Credentials
 
-Después de ejecutar los scripts de población, puedes acceder con:
+After running the population scripts, you can access with:
 
 ```
-Contraseña por defecto: campus2026
+Default password: InfoCampus2026
 ```
 
-Las credenciales específicas se generan en `credenciales/*.txt` después de ejecutar `3_poblacion.py`
+Specific credentials are generated in `credenciales/*.txt` after running `3_poblacion.py`
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## 🏗️ System Architecture
 
 ```
 infocampus/
 ├── backend/                    # Django REST API
-│   ├── api/                   # Apps Django
-│   │   ├── carreras/         # Gestión de carreras
-│   │   ├── materias/         # Gestión de materias
-│   │   ├── usuarios/         # Sistema de usuarios
-│   │   ├── secciones/        # Secciones y horarios
-│   │   ├── inscripciones/    # Registro de inscripciones
-│   │   ├── calificaciones/   # Sistema de notas
-│   │   └── pagos/            # Módulo financiero
+│   ├── api/                   # Django apps
+│   │   ├── carreras/         # Career management
+│   │   ├── materias/         # Course management
+│   │   ├── usuarios/         # User system
+│   │   ├── secciones/        # Sections and schedules
+│   │   ├── inscripciones/    # Enrollment registration
+│   │   ├── calificaciones/   # Grading system
+│   │   └── pagos/            # Financial module
 │   ├── manage.py
 │   └── requirements.txt
 │
 ├── frontend/                   # React + Vite
 │   ├── src/
-│   │   ├── components/       # Componentes reutilizables
-│   │   ├── pages/           # Vistas por rol
+│   │   ├── components/       # Reusable components
+│   │   ├── pages/           # Role-specific views
 │   │   ├── services/        # API calls
 │   │   ├── context/         # Context API
-│   │   └── utils/           # Utilidades
+│   │   └── utils/           # Utilities
 │   ├── package.json
 │   └── vite.config.js
 │
-├── scripts/                    # Scripts de población
-│   ├── 1_malla.py            # Estructura académica
-│   ├── 2_secciones.py        # Períodos y secciones
-│   ├── 3_poblacion.py        # Usuarios y roles
-│   └── 4_actividad.py        # Actividad académica
+├── scripts/                    # Population scripts
+│   ├── 1_malla.py            # Academic structure
+│   ├── 2_secciones.py        # Periods and sections
+│   ├── 3_poblacion.py        # Users and roles
+│   └── 4_actividad.py        # Academic activity
 │
-└── credenciales/              # Generado automáticamente
-    └── *.txt                  # Credenciales de usuarios
+└── credenciales/              # Auto-generated
+    └── *.txt                  # User credentials
 ```
 
-### Diagrama de Arquitectura
+### Architecture Diagram
 
 ```
 ┌─────────────┐         ┌──────────────┐         ┌─────────────┐
@@ -133,111 +135,111 @@ infocampus/
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Tech Stack
 
 ### Backend
 
-| Tecnología | Versión | Propósito |
-|-----------|---------|-----------|
-| **Django** | 6.0.1 | Framework web principal |
-| **Django REST Framework** | 3.16.1 | Construcción de API RESTful |
-| **djangorestframework-simplejwt** | 5.5.1 | Autenticación JWT |
-| **django-cors-headers** | 4.9.0 | Manejo de CORS |
-| **Faker** | 40.1.2 | Generación de datos de prueba |
-| **Pillow** | 12.1.0 | Procesamiento de imágenes |
-| **python-dotenv** | 1.2.1 | Variables de entorno |
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| **Django** | 6.0.1 | Main web framework |
+| **Django REST Framework** | 3.16.1 | RESTful API construction |
+| **djangorestframework-simplejwt** | 5.5.1 | JWT authentication |
+| **django-cors-headers** | 4.9.0 | CORS handling |
+| **Faker** | 40.1.2 | Test data generation |
+| **Pillow** | 12.1.0 | Image processing |
+| **python-dotenv** | 1.2.1 | Environment variables |
 
 ### Frontend
 
-| Tecnología | Versión | Propósito |
-|-----------|---------|-----------|
-| **React** | 19.2.0 | Biblioteca UI |
-| **Vite** | 7.2.4 | Build tool y dev server |
-| **Tailwind CSS** | 4.1.18 | Framework de estilos |
-| **Axios** | 1.13.2 | Cliente HTTP |
-| **React Router** | 7.13.0 | Enrutamiento SPA |
-| **Recharts** | 3.7.0 | Gráficos y visualización |
-| **Lucide React** | 0.563.0 | Iconografía |
-| **Framer Motion** | 12.29.2 | Animaciones |
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| **React** | 19.2.0 | UI library |
+| **Vite** | 7.2.4 | Build tool and dev server |
+| **Tailwind CSS** | 4.1.18 | Styling framework |
+| **Axios** | 1.13.2 | HTTP client |
+| **React Router** | 7.13.0 | SPA routing |
+| **Recharts** | 3.7.0 | Charts and visualization |
+| **Lucide React** | 0.563.0 | Icon library |
+| **Framer Motion** | 12.29.2 | Animations |
 
-### Herramientas de Desarrollo
+### Development Tools
 
-- **Git** - Control de versiones
-- **ESLint** - Linting de JavaScript
-- **PostCSS** - Procesamiento de CSS
-- **SQLite Browser** - Exploración de BD
+- **Git** - Version control
+- **ESLint** - JavaScript linting
+- **PostCSS** - CSS processing
+- **SQLite Browser** - Database exploration
 
 ---
 
-## 🚀 Instalación y Configuración
+## 🚀 Installation & Setup
 
-### Prerrequisitos
+### Prerequisites
 
 ```bash
-# Versiones requeridas
+# Required versions
 Python 3.11+
 Node.js 18+
 npm 9+
 ```
 
-### Instalación Paso a Paso
+### Step-by-Step Installation
 
-#### 1️⃣ Clonar el Repositorio
+#### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/tu-usuario/infocampus.git
+git clone https://github.com/your-username/infocampus.git
 cd infocampus
 ```
 
-#### 2️⃣ Configurar Backend (Terminal 1)
+#### 2️⃣ Backend Setup (Terminal 1)
 
 ```bash
-# Crear entorno virtual
+# Create virtual environment
 python -m venv venv
 
-# Activar entorno virtual
-# En Linux/Mac:
+# Activate virtual environment
+# On Linux/Mac:
 source venv/bin/activate
-# En Windows:
+# On Windows:
 venv\Scripts\activate
 
-# Instalar dependencias
+# Install dependencies
 pip install -r requirements.txt
 
-# Configurar base de datos
+# Configure database
 python manage.py makemigrations
 python manage.py migrate
 
-# Ejecutar scripts de población (EN ORDEN)
+# Run population scripts (IN ORDER)
 python 1_malla.py
 python 2_secciones.py
 python 3_poblacion.py
 python 4_actividad.py
 
-# Iniciar servidor de desarrollo
+# Start development server
 python manage.py runserver
 ```
 
-**Backend disponible en:** `http://localhost:8000`
+**Backend available at:** `http://localhost:8000`
 
-#### 3️⃣ Configurar Frontend (Terminal 2)
+#### 3️⃣ Frontend Setup (Terminal 2)
 
 ```bash
-# Navegar al directorio frontend
+# Navigate to frontend directory
 cd frontend
 
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Iniciar servidor de desarrollo
+# Start development server
 npm run dev
 ```
 
-**Frontend disponible en:** `http://localhost:5173`
+**Frontend available at:** `http://localhost:5173`
 
-### ⚙️ Variables de Entorno
+### ⚙️ Environment Variables
 
-Crear archivo `.env` en la raíz del backend:
+Create `.env` file in backend root:
 
 ```env
 # Django
@@ -255,257 +257,257 @@ JWT_REFRESH_TOKEN_LIFETIME=1440
 
 ---
 
-## 📦 Módulos Funcionales
+## 📦 Functional Modules
 
-### 1. Gestión de Malla Curricular
-- ✅ Administración de carreras
-- ✅ Gestión de materias y créditos
-- ✅ Sistema de prerequisitos
-- ✅ Configuración de precios por crédito
+### 1. Curriculum Management
+- ✅ Career administration
+- ✅ Course and credit management
+- ✅ Prerequisites system
+- ✅ Credit pricing configuration
 
-### 2. Sistema de Períodos y Secciones
-- ✅ Control de ciclos lectivos
-- ✅ Gestión de horarios y aulas
-- ✅ Asignación de profesores
-- ✅ Control de cupos
+### 2. Periods and Sections System
+- ✅ Academic cycle control
+- ✅ Schedule and classroom management
+- ✅ Professor assignment
+- ✅ Enrollment capacity control
 
-### 3. Sistema de Inscripciones
-- ✅ Registro de estudiantes en secciones
-- ✅ Validación de cupos disponibles
-- ✅ Verificación de prerequisitos
-- ✅ Historial de inscripciones
+### 3. Enrollment System
+- ✅ Student registration in sections
+- ✅ Available capacity validation
+- ✅ Prerequisites verification
+- ✅ Enrollment history
 
-### 4. Gestión de Calificaciones
-- ✅ Ingreso de notas por profesores
-- ✅ Consulta de calificaciones
-- ✅ Auditoría de cambios
-- ✅ Cálculo automático de promedios
+### 4. Grade Management
+- ✅ Grade entry by professors
+- ✅ Grade queries
+- ✅ Change audit trail
+- ✅ Automatic average calculation
 
-### 5. Módulo Financiero
-- ✅ Cálculo automático de deudas
-- ✅ Sistema de becas (25%, 50%, 75%, 100%)
-- ✅ Bloqueo por morosidad
-- ✅ Registro de pagos
-- ✅ Reportes financieros
+### 5. Financial Module
+- ✅ Automatic debt calculation
+- ✅ Scholarship system (25%, 50%, 75%, 100%)
+- ✅ Delinquency blocking
+- ✅ Payment registration
+- ✅ Financial reports
 
-### 6. Dashboard Analítico
-- ✅ Indicadores clave por rol
-- ✅ Gráficos interactivos
-- ✅ Accesos rápidos
-- ✅ Estadísticas en tiempo real
+### 6. Analytical Dashboard
+- ✅ Role-specific key indicators
+- ✅ Interactive charts
+- ✅ Quick access shortcuts
+- ✅ Real-time statistics
 
 ---
 
-## 🔐 Sistema RBAC (Control de Acceso Basado en Roles)
+## 🔐 RBAC System (Role-Based Access Control)
 
-### Roles Implementados
+### Implemented Roles
 
-| Rol | Permisos | Casos de Uso |
+| Role | Permissions | Use Cases |
 |-----|----------|--------------|
-| 👨‍🎓 **Estudiante** | - Ver materias inscritas<br>- Consultar calificaciones<br>- Ver estado financiero<br>- Descargar certificados | Acceso limitado a información personal |
-| 👨‍🏫 **Profesor** | - Ingresar calificaciones<br>- Modificar notas<br>- Ver listas de alumnos<br>- Generar reportes de sección | Gestión académica de sus secciones |
-| 💰 **Tesorero** | - Registrar pagos<br>- Generar reportes financieros<br>- Gestionar morosidad<br>- Configurar becas | Control financiero completo |
-| 📊 **Coordinador** | - Gestionar secciones<br>- Asignar profesores<br>- Ver reportes académicos<br>- Administrar horarios | Coordinación académica |
-| 👔 **Director** | - Acceso completo al sistema<br>- Configurar carreras<br>- Gestionar períodos<br>- Ver todos los reportes | Administración general |
+| 👨‍🎓 **Student** | - View enrolled courses<br>- Check grades<br>- View financial status<br>- Download certificates | Limited access to personal information |
+| 👨‍🏫 **Professor** | - Enter grades<br>- Modify grades<br>- View student lists<br>- Generate section reports | Academic management of their sections |
+| 💰 **Treasurer** | - Register payments<br>- Generate financial reports<br>- Manage delinquency<br>- Configure scholarships | Complete financial control |
+| 📊 **Coordinator** | - Manage sections<br>- Assign professors<br>- View academic reports<br>- Manage schedules | Academic coordination |
+| 👔 **Director** | - Complete system access<br>- Configure careers<br>- Manage periods<br>- View all reports | General administration |
 
-### Implementación de Permisos
+### Permission Implementation
 
 ```python
-# Ejemplo de decorador de permisos
+# Example of permission decorator
 from functools import wraps
 from rest_framework.response import Response
 from rest_framework import status
 
-def rol_requerido(roles_permitidos):
+def role_required(allowed_roles):
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(request, *args, **kwargs):
-            if request.user.rol not in roles_permitidos:
+            if request.user.role not in allowed_roles:
                 return Response(
-                    {"error": "No tienes permisos para esta acción"},
+                    {"error": "You don't have permission for this action"},
                     status=status.HTTP_403_FORBIDDEN
                 )
             return view_func(request, *args, **kwargs)
         return wrapper
     return decorator
 
-# Uso en vistas
-@rol_requerido(['profesor', 'coordinador', 'director'])
-def ingresar_calificacion(request):
-    # Lógica de ingreso de calificación
+# Usage in views
+@role_required(['professor', 'coordinator', 'director'])
+def enter_grade(request):
+    # Grade entry logic
     pass
 ```
 
 ---
 
-## 💼 Lógica de Negocio
+## 💼 Business Logic
 
-### Sistema Financiero Inteligente
+### Intelligent Financial System
 
-#### Cálculo de Deudas
-
-```python
-def calcular_deuda_estudiante(estudiante):
-    """
-    Calcula la deuda total de un estudiante considerando:
-    - Inscripciones sin pago
-    - Becas aplicables
-    - Días de gracia por carrera
-    """
-    deuda_total = 0
-    
-    for inscripcion in estudiante.inscripciones.filter(pagado=False):
-        costo_materia = inscripcion.seccion.materia.creditos * \
-                       inscripcion.seccion.materia.carrera.precio_credito
-        
-        # Aplicar descuento por beca
-        if estudiante.beca_porcentaje > 0:
-            descuento = costo_materia * (estudiante.beca_porcentaje / 100)
-            costo_materia -= descuento
-        
-        deuda_total += costo_materia
-    
-    return deuda_total
-```
-
-#### Bloqueo por Morosidad
+#### Debt Calculation
 
 ```python
-def verificar_bloqueo_morosidad(estudiante):
+def calculate_student_debt(student):
     """
-    Verifica si un estudiante debe ser bloqueado por morosidad
+    Calculates total student debt considering:
+    - Unpaid enrollments
+    - Applicable scholarships
+    - Grace days per career
     """
-    deuda = calcular_deuda_estudiante(estudiante)
-    dias_gracia = estudiante.carrera.dias_gracia
+    total_debt = 0
     
-    # Verificar si tiene deuda vencida
-    for inscripcion in estudiante.inscripciones.filter(pagado=False):
-        fecha_limite = inscripcion.fecha_inscripcion + timedelta(days=dias_gracia)
+    for enrollment in student.enrollments.filter(paid=False):
+        course_cost = enrollment.section.course.credits * \
+                     enrollment.section.course.career.credit_price
         
-        if datetime.now() > fecha_limite and deuda > 0:
-            return True  # Bloqueado
+        # Apply scholarship discount
+        if student.scholarship_percentage > 0:
+            discount = course_cost * (student.scholarship_percentage / 100)
+            course_cost -= discount
+        
+        total_debt += course_cost
     
-    return False  # No bloqueado
+    return total_debt
 ```
 
-### Sistema de Becas
+#### Delinquency Blocking
 
-Fórmula de cálculo:
+```python
+def verify_delinquency_block(student):
+    """
+    Verifies if a student should be blocked for delinquency
+    """
+    debt = calculate_student_debt(student)
+    grace_days = student.career.grace_days
+    
+    # Check for overdue debt
+    for enrollment in student.enrollments.filter(paid=False):
+        deadline = enrollment.enrollment_date + timedelta(days=grace_days)
+        
+        if datetime.now() > deadline and debt > 0:
+            return True  # Blocked
+    
+    return False  # Not blocked
+```
+
+### Scholarship System
+
+Calculation formula:
 
 ```
-Costo Final = Créditos × Precio por Crédito × (1 - Porcentaje Beca / 100)
+Final Cost = Credits × Price per Credit × (1 - Scholarship Percentage / 100)
 ```
 
-**Ejemplo:**
-- Materia: 4 créditos
-- Precio por crédito: $50
-- Beca: 50%
-- Costo final: 4 × $50 × (1 - 0.5) = **$100**
+**Example:**
+- Course: 4 credits
+- Price per credit: $50
+- Scholarship: 50%
+- Final cost: 4 × $50 × (1 - 0.5) = **$100**
 
-### Simulación de Realismo Operacional
+### Operational Realism Simulation
 
-El sistema genera datos que reflejan la complejidad del mundo real:
+The system generates data reflecting real-world complexity:
 
-| Métrica | Valor | Propósito |
-|---------|-------|-----------|
-| Estudiantes Morosos | **20%** | Validar bloqueos financieros |
-| Notas Reprobadas | **20%** | Probar restricciones académicas |
-| Estudiantes Becados | **20%** | Validar cálculo de descuentos |
+| Metric | Value | Purpose |
+|---------|-------|---------|
+| Delinquent Students | **20%** | Validate financial blocks |
+| Failed Grades | **20%** | Test academic restrictions |
+| Scholarship Students | **20%** | Validate discount calculations |
 
 ---
 
-## 📊 Scripts de Población de Datos
+## 📊 Data Population Scripts
 
-### Script 1: `1_malla.py` - Estructura Académica
+### Script 1: `1_malla.py` - Academic Structure
 
-**Propósito:** Crear la malla curricular completa de la institución.
+**Purpose:** Create the institution's complete curriculum.
 
 ```python
-# Ejemplo de salida
+# Example output
 """
-✓ Creadas 5 carreras
-✓ Creadas 30 materias (6 por carrera)
-✓ Asignados créditos: 2-5 por materia
-✓ Configurados precios: $45-$80 por crédito
+✓ Created 5 careers
+✓ Created 30 courses (6 per career)
+✓ Assigned credits: 2-5 per course
+✓ Configured prices: $45-$80 per credit
 """
 ```
 
-**Carreras generadas:**
-- Ingeniería en Sistemas
-- Derecho
-- Medicina
-- Administración de Empresas
-- Psicología
+**Generated careers:**
+- Computer Engineering
+- Law
+- Medicine
+- Business Administration
+- Psychology
 
-### Script 2: `2_secciones.py` - Logística de Tiempos
+### Script 2: `2_secciones.py` - Time Logistics
 
-**Propósito:** Configurar períodos lectivos y generar secciones operativas.
+**Purpose:** Configure academic periods and generate operational sections.
 
 ```python
-# Ejemplo de salida
+# Example output
 """
-✓ Creados 4 períodos lectivos
-✓ Generadas ~60 secciones
-✓ Asignados horarios: 7:00 AM - 8:00 PM
-✓ Distribuidas aulas: A101-A120
+✓ Created 4 academic periods
+✓ Generated ~60 sections
+✓ Assigned schedules: 7:00 AM - 8:00 PM
+✓ Distributed classrooms: A101-A120
 """
 ```
 
-**Períodos creados:**
-- 2024-2 (Cerrado)
-- 2025-1 (Cerrado)
-- 2025-2 (Cerrado)
-- 2026-1 (Activo)
+**Created periods:**
+- 2024-2 (Closed)
+- 2025-1 (Closed)
+- 2025-2 (Closed)
+- 2026-1 (Active)
 
-### Script 3: `3_poblacion.py` - Población de Usuarios
+### Script 3: `3_poblacion.py` - User Population
 
-**Propósito:** Crear la estructura completa de usuarios y roles (RBAC).
+**Purpose:** Create complete user structure and roles (RBAC).
 
 ```python
-# Ejemplo de salida
+# Example output
 """
-✓ Creados 150 estudiantes
-✓ Creados 20 profesores
-✓ Creados 2 directores
-✓ Creados 3 coordinadores
-✓ Creados 3 tesoreros
-✓ Generadas credenciales en carpeta 'credenciales/'
+✓ Created 150 students
+✓ Created 20 professors
+✓ Created 2 directors
+✓ Created 3 coordinators
+✓ Created 3 treasurers
+✓ Generated credentials in 'credenciales/' folder
 """
 ```
 
-**Características:**
-- Datos personales realistas con Faker
-- Asignación automática de profesores a secciones
-- Vinculación de estudiantes a carreras
-- Generación de archivos `.txt` con credenciales
+**Features:**
+- Realistic personal data with Faker
+- Automatic professor assignment to sections
+- Student-career linking
+- Individual `.txt` credential files generation
 
-### Script 4: `4_actividad.py` - Actividad Académica
+### Script 4: `4_actividad.py` - Academic Activity
 
-**Propósito:** Simular actividad académica y financiera histórica.
+**Purpose:** Simulate historical and current academic and financial activity.
 
 ```python
-# Ejemplo de salida
+# Example output
 """
-✓ Generadas ~900 inscripciones actuales
-✓ Generadas ~1,200 inscripciones históricas
-✓ Registradas ~600 transacciones de pago
-✓ Implementado 20% de reprobaciones
-✓ Implementado 20% de morosidad
+✓ Generated ~900 current enrollments
+✓ Generated ~1,200 historical enrollments
+✓ Recorded ~600 payment transactions
+✓ Implemented 20% failures
+✓ Implemented 20% delinquency
 """
 ```
 
 ---
 
-## 🌐 API Endpoints
+## 🌐 API Documentation
 
-### Autenticación
+### Authentication
 
 ```http
 POST /api/auth/login/
 Content-Type: application/json
 
 {
-  "username": "estudiante123",
+  "username": "student123",
   "password": "InfoCampus2026"
 }
 
@@ -515,286 +517,288 @@ Response:
   "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc...",
   "user": {
     "id": 1,
-    "username": "estudiante123",
-    "rol": "estudiante",
-    "nombre": "Juan Pérez"
+    "username": "student123",
+    "role": "student",
+    "name": "John Doe"
   }
 }
 ```
 
-### Gestión de Carreras
+### Career Management
 
 ```http
-# Listar todas las carreras
-GET /api/carreras/
+# List all careers
+GET /api/careers/
 
-# Obtener una carrera específica
-GET /api/carreras/{id}/
+# Get specific career
+GET /api/careers/{id}/
 
-# Crear nueva carrera (Solo Director)
-POST /api/carreras/
+# Create new career (Director only)
+POST /api/careers/
 Authorization: Bearer {access_token}
 
-# Actualizar carrera (Solo Director)
-PUT /api/carreras/{id}/
+# Update career (Director only)
+PUT /api/careers/{id}/
 Authorization: Bearer {access_token}
 ```
 
-### Gestión de Inscripciones
+### Enrollment Management
 
 ```http
-# Inscribirse en una sección
-POST /api/inscripciones/
+# Enroll in a section
+POST /api/enrollments/
 Authorization: Bearer {access_token}
 Content-Type: application/json
 
 {
-  "seccion_id": 15,
-  "estudiante_id": 45
+  "section_id": 15,
+  "student_id": 45
 }
 
 Response:
 {
   "id": 123,
-  "estudiante": "Juan Pérez",
-  "seccion": "Matemáticas I - Sección A",
-  "fecha_inscripcion": "2026-02-03T10:30:00Z",
-  "pagado": false,
-  "costo": 200.00
+  "student": "John Doe",
+  "section": "Mathematics I - Section A",
+  "enrollment_date": "2026-02-03T10:30:00Z",
+  "paid": false,
+  "cost": 200.00
 }
 ```
 
-### Gestión de Calificaciones
+### Grade Management
 
 ```http
-# Ingresar calificación (Solo Profesor)
-POST /api/calificaciones/
+# Enter grade (Professor only)
+POST /api/grades/
 Authorization: Bearer {access_token}
 Content-Type: application/json
 
 {
-  "inscripcion_id": 123,
-  "nota": 8.5,
-  "periodo": "2026-1"
+  "enrollment_id": 123,
+  "grade": 8.5,
+  "period": "2026-1"
 }
 
-# Consultar calificaciones (Estudiante)
-GET /api/calificaciones/estudiante/{id}/
+# Query grades (Student)
+GET /api/grades/student/{id}/
 Authorization: Bearer {access_token}
 
 Response:
 {
-  "estudiante": "Juan Pérez",
-  "periodo": "2026-1",
-  "calificaciones": [
+  "student": "John Doe",
+  "period": "2026-1",
+  "grades": [
     {
-      "materia": "Matemáticas I",
-      "nota": 8.5,
-      "creditos": 4,
-      "estado": "Aprobado"
+      "course": "Mathematics I",
+      "grade": 8.5,
+      "credits": 4,
+      "status": "Passed"
     },
     ...
   ],
-  "promedio_periodo": 8.2
+  "period_average": 8.2
 }
 ```
 
-### Módulo Financiero
+### Financial Module
 
 ```http
-# Registrar pago (Solo Tesorero)
-POST /api/pagos/
+# Register payment (Treasurer only)
+POST /api/payments/
 Authorization: Bearer {access_token}
 Content-Type: application/json
 
 {
-  "estudiante_id": 45,
-  "monto": 200.00,
-  "metodo_pago": "efectivo",
-  "concepto": "Inscripción Matemáticas I"
+  "student_id": 45,
+  "amount": 200.00,
+  "payment_method": "cash",
+  "concept": "Mathematics I Enrollment"
 }
 
-# Consultar estado financiero (Estudiante)
-GET /api/pagos/estado/{estudiante_id}/
+# Query financial status (Student)
+GET /api/payments/status/{student_id}/
 Authorization: Bearer {access_token}
 
 Response:
 {
-  "estudiante": "Juan Pérez",
-  "deuda_total": 600.00,
-  "deuda_periodo_actual": 400.00,
-  "deuda_periodos_anteriores": 200.00,
-  "bloqueado": true,
-  "tiene_convenio": false,
-  "beca_porcentaje": 50
+  "student": "John Doe",
+  "total_debt": 600.00,
+  "current_period_debt": 400.00,
+  "previous_periods_debt": 200.00,
+  "blocked": true,
+  "has_payment_plan": false,
+  "scholarship_percentage": 50
 }
-```
-
-
-### Volumen de Datos Generados
-
-| Entidad | Cantidad |
-|---------|----------|
-| Carreras | 5 |
-| Materias | 30 |
-| Períodos Lectivos | 4 |
-| Secciones | ~60 |
-| Usuarios Totales | 178 |
-| Estudiantes | 150 |
-| Inscripciones Actuales | ~750-900 |
-| Inscripciones Históricas | ~1,200 |
-| Registros de Pago | ~600 |
-| Archivos de Credenciales | 178 |
-
-### Líneas de Código
-
-```
-Backend (Python):           ~1,500 LOC
-Frontend (JavaScript/React): ~2,000 LOC
-Scripts de población:        ~500 LOC
-Configuración y utilidades:  ~300 LOC
-────────────────────────────────────
-Total:                      ~4,300 LOC
 ```
 
 ---
 
-## 🎨 Diseño de Interfaz
+## 📈 Project Metrics
 
-### Características del Diseño
+### Generated Data Volume
 
-- ✅ **Sistema de diseño consistente**
-  - Paleta de colores institucional
-  - Tipografía: Arial/Sans-serif
-  - Iconografía: Lucide React
+| Entity | Quantity |
+|---------|----------|
+| Careers | 5 |
+| Courses | 30 |
+| Academic Periods | 4 |
+| Sections | ~60 |
+| Total Users | 178 |
+| Students | 150 |
+| Current Enrollments | ~750-900 |
+| Historical Enrollments | ~1,200 |
+| Payment Records | ~600 |
+| Credential Files | 178 |
+
+### Lines of Code
+
+```
+Backend (Python):              ~1,500 LOC
+Frontend (JavaScript/React):   ~2,000 LOC
+Population scripts:             ~500 LOC
+Configuration and utilities:    ~300 LOC
+────────────────────────────────────────
+Total:                         ~4,300 LOC
+```
+
+---
+
+## 🎨 UI Design
+
+### Design Features
+
+- ✅ **Consistent design system**
+  - Institutional color palette
+  - Typography: Arial/Sans-serif
+  - Icons: Lucide React
 
 - ✅ **Responsive Design**
-  - Adaptación automática a móviles
-  - Optimizado para tablets
-  - Soporte completo desktop
+  - Automatic mobile adaptation
+  - Optimized for tablets
+  - Full desktop support
 
-- ✅ **Componentes Reutilizables**
+- ✅ **Reusable Components**
   - Dashboard Cards
-  - Tablas dinámicas
-  - Formularios validados
-  - Modales y notificaciones
+  - Dynamic Tables
+  - Validated Forms
+  - Modals and notifications
 
-- ✅ **Animaciones Fluidas**
-  - Transiciones con Framer Motion
-  - Feedback visual inmediato
+- ✅ **Smooth Animations**
+  - Transitions with Framer Motion
+  - Immediate visual feedback
   - Loading states
 
-### Vistas Principales
+### Main Views
 
-#### 1. Login / Autenticación
+#### 1. Login / Authentication
 ```jsx
-// Pantalla de acceso limpia y profesional
-- Validación de credenciales en tiempo real
-- Gestión de sesiones con JWT
-- Recuperación de contraseña
-- Diseño centrado y minimalista
+// Clean and professional access screen
+- Real-time credential validation
+- Session management with JWT
+- Password recovery
+- Centered and minimalist design
 ```
 
-#### 2. Dashboard por Rol
+#### 2. Role-Based Dashboard
 ```jsx
-// Vista personalizada según rol del usuario
-- Cards con KPIs relevantes
-- Gráficos interactivos (Recharts)
-- Accesos rápidos a funciones principales
-- Navegación intuitiva
+// Custom view according to authenticated user role
+- Cards with relevant KPIs
+- Interactive charts (Recharts)
+- Quick access to main functions
+- Intuitive navigation
 ```
 
-#### 3. Gestión de Datos
+#### 3. Data Management
 ```jsx
-// Tablas responsive con funcionalidad completa
-- Paginación automática
-- Ordenamiento por columnas
-- Búsqueda y filtrado en tiempo real
-- Acciones inline (editar, eliminar, ver)
+// Responsive tables with complete functionality
+- Automatic pagination
+- Column sorting
+- Real-time search and filtering
+- Inline actions (edit, delete, view)
 ```
 
 ---
 
 ## 🗺️ Roadmap
 
-### ✅ Versión 1.0 (Actual)
-- [x] Sistema RBAC completo
-- [x] Módulo financiero con bloqueos
-- [x] Gestión de calificaciones
-- [x] Dashboard analítico
-- [x] Scripts de población
+### ✅ Version 1.0 (Current)
+- [x] Complete RBAC system
+- [x] Financial module with blocks
+- [x] Grade management
+- [x] Analytical dashboard
+- [x] Population scripts
 
-### 🚧 Versión 1.1 (En Desarrollo)
-- [ ] Notificaciones en tiempo real (WebSockets)
-- [ ] Exportación de reportes a PDF
-- [ ] Sistema de mensajería interno
-- [ ] Calendario académico integrado
+### 🚧 Version 1.1 (Planned)
+- [ ] Real-time notifications (WebSockets)
+- [ ] PDF report export
+- [ ] Internal messaging system
+- [ ] Integrated academic calendar
 
-### 🔮 Versión 2.0 (Planificado)
-- [ ] Migración a PostgreSQL
-- [ ] Integración con sistemas de pago (Stripe/PayPal)
-- [ ] App móvil nativa (React Native)
-- [ ] Sistema de asistencia biométrica
-- [ ] Módulo de biblioteca digital
+### 🔮 Version 2.0 (Future)
+- [ ] PostgreSQL migration
+- [ ] Payment system integration (Stripe/PayPal)
+- [ ] Native mobile app (React Native)
+- [ ] Biometric attendance system
+- [ ] Digital library module
 
 ---
 
-## 🤝 Contribución
+## 🤝 Contributing
 
-Este es un proyecto de portafolio personal, pero estoy abierto a sugerencias y feedback.
+This is a personal portfolio project, but I'm open to suggestions and feedback.
 
-### Cómo Contribuir
+### How to Contribute
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-### Estándares de Código
+### Code Standards
 
-- **Python:** Seguir PEP 8
-- **JavaScript:** Usar ESLint config de Airbnb
+- **Python:** Follow PEP 8
+- **JavaScript:** Use Airbnb ESLint config
 - **Commits:** Conventional Commits
-- **Documentación:** Docstrings en funciones importantes
+- **Documentation:** Docstrings in important functions
 
 ---
 
-## 📝 Licencia
+## 📝 License
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 📞 Contacto
+## 📞 Contact
 
 **Arin Romero**
 
 - Email: ariin.romeror@gmail.com
-
-- GitHub: [ariinromeror](https://github.com/ariinromeror)
-
----
-
-## 🙏 Agradecimientos
-
-Este proyecto fue desarrollado utilizando:
-- Metodología AI-Driven para acelerar el desarrollo
-- Mejores prácticas de la comunidad Django y React
-- Patrones de diseño empresariales establecidos
-- Feedback de desarrolladores senior
+- GitHub: [@ariinromeror](https://github.com/ariinromeror)
 
 ---
 
-## 📚 Recursos Adicionales
+## 🙏 Acknowledgments
 
-### Documentación
+This project was developed using:
+- AI-Driven methodology to accelerate development
+- Best practices from Django and React communities
+- Established enterprise design patterns
+- Feedback from senior developers
+
+---
+
+## 📚 Additional Resources
+
+### Documentation
 - [Django Documentation](https://docs.djangoproject.com/)
 - [React Documentation](https://react.dev/)
 - [Django REST Framework](https://www.django-rest-framework.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
-### Tutoriales Relacionados
+### Related Tutorials
 - [Building RESTful APIs with Django](https://realpython.com/django-rest-framework-quick-start/)
 - [React Best Practices](https://react.dev/learn/thinking-in-react)
 - [JWT Authentication in Django](https://simpleisbetterthancomplex.com/tutorial/2018/12/19/how-to-use-jwt-authentication-with-django-rest-framework.html)
@@ -803,8 +807,8 @@ Este proyecto fue desarrollado utilizando:
 
 <div align="center">
 
-**⭐ Si este proyecto te resultó útil, no olvides darle una estrella ⭐**
+**⭐ If you found this project useful, don't forget to give it a star ⭐**
 
-*Desarrollado con ❤️ como proyecto de portafolio profesional*
+*Developed with ❤️ as a professional portfolio project*
 
 </div>
